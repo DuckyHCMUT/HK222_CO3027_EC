@@ -19,7 +19,7 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #33bfbf;
+    background-image: linear-gradient(135deg,rgb(12, 97, 254) 0%, rgb(6, 63, 164) 100%);
     ${mobile({ padding: "10px 0px" })}
     position: sticky;
 `;
@@ -37,6 +37,7 @@ const SearchButton = styled.button`
     background-color: rgba(255, 255, 255, 0.2);
     padding: 0.5px 8px;
     text-align: center;
+    color: white;
     text-decoration: none;
     display: inline-block;
 `;
@@ -63,9 +64,10 @@ const Center = styled.div`
 const Logo = styled.h2`
     font-weight: bold;
     cursor: pointer;
-    color: black;
+    color: white;
     ${mobile({ fontSize: "24px" })}
 `;
+
 const Right = styled.div`
     flex: 1;
     display: flex;
@@ -76,15 +78,19 @@ const Right = styled.div`
 
 const MenuItem = styled.div`
     font-size: 18px;
+    color: white;
     cursor: pointer;
-    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    margin: 0px 15px 0px 15px;
+    align-items: center;
     text-align: center;
     ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
 const LoginWrapper = styled.div`
     background: rgba(255, 247, 247, 0.6);
-    margin-left: 25px;
+    color: black;
     padding: 10px;
     display: flex;
     text-align: center;
@@ -101,7 +107,7 @@ const Header = ({ onChange }) => {
             <Wrapper>
                 <Left>
                     <Link style={{ textDecoration: 'none' }}
-                        to="/BlankPage">
+                        to="/">
                         <Logo>Store</Logo>
                     </Link>
                 </Left>
@@ -137,7 +143,7 @@ const Header = ({ onChange }) => {
                         <LocalOfferOutlined />
                         Promotion
                     </MenuItem>
-                    <Link to="/user/cart"
+                    <Link to="/cart"
                         style={{ color: "inherit", textDecoration: "inherit" }}
                     >
                         <MenuItem>
@@ -146,7 +152,7 @@ const Header = ({ onChange }) => {
                         </MenuItem>
                     </Link>
                     <Link
-                        to="/user/login"
+                        to="/login"
                         style={{
                             color: "inherit",
                             textDecoration: "inherit",

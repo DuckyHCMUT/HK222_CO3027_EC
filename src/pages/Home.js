@@ -11,6 +11,7 @@ const Home = () => {
     return (
         <div>
             <Header onChange = {handleSearch} />
+            <Content/>
         </div>
     );
 };
