@@ -89,6 +89,13 @@ const Brand = styled.div`
   `
 
 const ProductCard = ({ item }) => {
+  function formatPrice(price) {
+    return price.toLocaleString('vn-VN', {
+      style: 'currency',
+      currency: 'VND'
+    });
+  }
+
   return (
     <Container>
       <Circle />
@@ -98,7 +105,7 @@ const ProductCard = ({ item }) => {
           {item.name}
         </Name>
         <Price>
-          {item.price}
+          {formatPrice(item.price)}
         </Price>
       </ItemInfo>
       <Info>

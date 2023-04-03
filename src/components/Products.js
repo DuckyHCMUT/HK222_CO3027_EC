@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import ProductCard from "./ProductCard";
-import { all } from "../static/data";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import apiKey from "../api/ApiKey";
 
 const Container = styled.div`
     padding: 20px;
@@ -11,23 +12,29 @@ const Container = styled.div`
 `;
 
 const Products = () => {
-    const [filter, setFilter] = useState([]);
-    const checkFilter = () => {
-        return all;
-    }
+    const [item, setItem] = useState([]);
 
     useEffect(() => {
-        setFilter(checkFilter());
+        axios.get(apiKey)
+            .then((response) => {
+                setItem(response.data);
+                console.log(response.data.items);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }, []);
 
     const valueList = (
-        filter ? (
-            <Container>
-                {filter.map((item) => (
-                    <ProductCard item={item} />
-                ))}
-            </Container>)
-            : 'Product is loading'
+        item.items ? (
+            <div>
+                <Container>
+                    {item.items.map((item) => (
+                        <ProductCard item={item} />
+                    ))}
+                </Container>
+            </div>
+        ) : 'Product is loading'
     );
 
     return (

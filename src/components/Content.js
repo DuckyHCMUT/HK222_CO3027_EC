@@ -10,12 +10,15 @@ const Container = styled.div`
     padding: 40px;
 `;
 
+const CategoryText = styled.h2`
+    margin-bottom: 5px;
+`;
+
 const Display = styled.div`
-    flex: 3;
     margin-left: 30px;
     margin-right: 50px;
-    border: 0.1px solid lightgrey;
-    display: flex;
+    ${'' /* border: 0.1px solid lightgrey; */}
+    ${'' /* display: flex; */}
     align-items: center;
     justify-content: center;
     ${mobile({ flex: 2, justifyContent: "center" })}
@@ -26,6 +29,9 @@ const Content = () => {
         <div>
             <Container>
                 <Display>
+                    <CategoryText>
+                        Featured phones
+                    </CategoryText>
                     <Products />
                 </Display>
             </Container>
