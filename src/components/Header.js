@@ -44,7 +44,6 @@ const SearchContainer = styled.div`
     align-items: center;
     margin-right: 30px;
     width: 100%;
-    width: 100%;
 `;
 
 const Input = {
@@ -94,7 +93,6 @@ const LoginWrapper = styled.div`
 `
 
 const Header = () => {
-const Header = () => {
     return (
         <Container>
             <Wrapper>
@@ -106,7 +104,6 @@ const Header = () => {
                 </Left>
                 <Center>
                     <form action="/searchResult/" method="get">
-                    <form action="/searchResult/" method="get">
                         <SearchContainer>
                             <label htmlFor="header-search" />
                             <input
@@ -117,7 +114,6 @@ const Header = () => {
                                 style={Input}
                             />
                             <Right>
-                                <SearchButton type="submit">
                                 <SearchButton type="submit">
                                     Search
                                 </SearchButton>
