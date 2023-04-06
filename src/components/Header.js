@@ -6,21 +6,18 @@ import {
     LocationOnOutlined
 } from "@material-ui/icons";
 import styled from "styled-components";
-import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
     height: 100%;
-    ${mobile({ height: "50px" })}
 `;
 
 const Wrapper = styled.div`
-    padding: 10px 20px;
+    padding: 0px 30px 0px 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-image: linear-gradient(135deg,rgb(12, 97, 254) 0%, rgb(6, 63, 164) 100%);
-    ${mobile({ padding: "10px 0px" })}
     position: sticky;
 `;
 
@@ -45,9 +42,8 @@ const SearchButton = styled.button`
 const SearchContainer = styled.div`
     display: flex;
     align-items: center;
-    margin-left: 30px;
     margin-right: 30px;
-    padding: 4px;
+    width: 100%;
 `;
 
 const Input = {
@@ -65,7 +61,6 @@ const Logo = styled.h2`
     font-weight: bold;
     cursor: pointer;
     color: white;
-    ${mobile({ fontSize: "24px" })}
 `;
 
 const Right = styled.div`
@@ -73,7 +68,6 @@ const Right = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    ${mobile({ flex: 2, justifyContent: "center" })}
 `;
 
 const MenuItem = styled.div`
@@ -85,7 +79,6 @@ const MenuItem = styled.div`
     margin: 0px 15px 0px 15px;
     align-items: center;
     text-align: center;
-    ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
 const LoginWrapper = styled.div`
@@ -98,10 +91,7 @@ const LoginWrapper = styled.div`
     border-radius: 10px;
 `
 
-const Header = ({ onChange }) => {
-    const { search } = window.location;
-    const query = new URLSearchParams(search).get('perfume'); // Fetched the searched item successfully
-
+const Header = () => {
     return (
         <Container>
             <Wrapper>
@@ -112,7 +102,7 @@ const Header = ({ onChange }) => {
                     </Link>
                 </Left>
                 <Center>
-                    <form action="/" method="get">
+                    <form action="/searchResult/" method="get">
                         <SearchContainer>
                             <label htmlFor="header-search" />
                             <input
@@ -123,7 +113,7 @@ const Header = ({ onChange }) => {
                                 style={Input}
                             />
                             <Right>
-                                <SearchButton type="submit" onClick={onChange(!query ? '' : query)}> {/* After pressing this button, the query will already hold the searched value*/}
+                                <SearchButton type="submit">
                                     Search
                                 </SearchButton>
                             </Right>

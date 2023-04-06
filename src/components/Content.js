@@ -1,39 +1,34 @@
 import styled from "styled-components";
-import { mobile } from "../responsive";
-import Products from "./Products";
+import Products from "./Products/Products";
 
 const Container = styled.div`
-    height: 80%;
-    width: 95%;
     display: flex;
     flex-direction: row;
-    padding: 40px;
+    margin-left: 200px;
+    margin-right: 200px;
+    align-items: center;
+    justify-content: center;
 `;
 
 const CategoryText = styled.h2`
-    margin-bottom: 5px;
+    margin-left: 200px;
+    margin-right: 200px;
+    margin-bottom: 10px;
 `;
 
 const Display = styled.div`
-    margin-left: 30px;
-    margin-right: 50px;
-    ${'' /* border: 0.1px solid lightgrey; */}
-    ${'' /* display: flex; */}
     align-items: center;
     justify-content: center;
-    ${mobile({ flex: 2, justifyContent: "center" })}
 `;
 
 const Content = () => {
     return (
         <div>
+            <CategoryText>
+                Featured phones
+            </CategoryText>
             <Container>
-                <Display>
-                    <CategoryText>
-                        Featured phones
-                    </CategoryText>
-                    <Products />
-                </Display>
+                <Products query={''} />
             </Container>
         </div>
     )

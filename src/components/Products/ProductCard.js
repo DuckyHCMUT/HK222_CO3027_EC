@@ -26,7 +26,6 @@ const ItemInfo = styled.div`
     opacity: 100;
     width: 100%;
     height: 100%;
-    position: absolute;
     z-index: 4;
     align-items: center;
     justify-content: center;
@@ -35,29 +34,28 @@ const ItemInfo = styled.div`
 
 const Container = styled.div`
     flex: 3;
-    margin: 15px;
+    margin: 5px 10px 5px 0px;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.1),0 2px 6px 2px rgba(60,64,67,.15);
     min-width: 280px;
     height: 350px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
     &:hover ${Info}{
       opacity: 1;
+      border-radius: 10px;
     }
   `;
 
-const Circle = styled.div`
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background-color: white;
-    position: absolute;
-  `;
-
 const Image = styled.img`
-    height: 65%;
-    z-index: 2;
+    display: block;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
   `;
 
 const Icon = styled.div`
@@ -77,15 +75,21 @@ const Icon = styled.div`
   `;
 
 const Name = styled.div`
+    margin: 5px 5px 0px 5px;
     font-size: 14px;
     font-weight: bold;
+    display: inline-block;
+    position: relative;
+    z-index: 10;
   `
 
 const Price = styled.div`
-    font-size: 12px;
-  `
-const Brand = styled.div`
-    font-size: 14px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 16px;
+    color: red;
+    font-weight: bold;
+    align-items: left;
   `
 
 const ProductCard = ({ item }) => {
@@ -98,12 +102,13 @@ const ProductCard = ({ item }) => {
 
   return (
     <Container>
-      <Circle />
-      <Image src={item.imgUrl} />
       <ItemInfo>
         <Name>
           {item.name}
         </Name>
+      </ItemInfo>
+        <Image src={item.imgUrl} />
+      <ItemInfo>
         <Price>
           {formatPrice(item.price)}
         </Price>
@@ -112,14 +117,13 @@ const ProductCard = ({ item }) => {
         <Icon onClick={() => alert("Added to cart")}>
           <ShoppingCartOutlined />
         </Icon>
-
         <Icon onClick={() => alert("Nothing")}>
           <SearchOutlined />
         </Icon>
-
         <Icon onClick={() => alert("Added to favorite")}>
           <FavoriteBorderOutlined />
         </Icon>
+
       </Info>
     </Container>
   );
