@@ -1,17 +1,13 @@
 import Header from "../components/Header";
 import Content from "../components/Content";
-import { useState } from "react";
+import HomeTopBlock from "../components/HomeTopBlock";
 
 const Home = () => {
-    const [searchValue, setSearchValue] = useState('');
-    const handleSearch = (val) => {
-        setSearchValue(val);
-    };
-
     return (
         <div>
-            <Header onChange = {handleSearch} />
-            <Content/>
+            <Header />
+            <HomeTopBlock />
+            <Content />
         </div>
     );
 };

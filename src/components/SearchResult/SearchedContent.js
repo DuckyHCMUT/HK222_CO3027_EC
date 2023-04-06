@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Products from "./Products/Products";
+import Products from "../Products/Products";
 
 const Container = styled.div`
     display: flex;
@@ -16,18 +16,18 @@ const CategoryText = styled.h2`
     margin-bottom: 10px;
 `;
 
-
-const Content = () => {
+const SearchedContent = ({ value }) => {
     return (
         <div>
+
             <CategoryText>
-                Featured phones
+                Result for: {value}
             </CategoryText>
             <Container>
-                <Products query={''} />
+                <Products query={value} />
             </Container>
         </div>
     )
 };
 
-export default Content;
+export default SearchedContent;
