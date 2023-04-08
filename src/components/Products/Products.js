@@ -28,7 +28,7 @@ const Products = ({ query }) => {
             .then(response => {
                 setFilteredItem(filterOnSearchValue(response.data.data));
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     }, [query]);
@@ -38,7 +38,7 @@ const Products = ({ query }) => {
             <div>
                 <Container>
                     {filteredItem.map((item) => (
-                        <ProductCard key={item.name} item={item} />
+                        <ProductCard key={item._id} item={item} />
                     ))}
                 </Container>
             </div>

@@ -1,7 +1,7 @@
 import {
-  FavoriteBorderOutlined,
-  SearchOutlined,
-  ShoppingCartOutlined,
+	FavoriteBorderOutlined,
+	SearchOutlined,
+	ShoppingCartOutlined,
 } from "@material-ui/icons";
 import styled from "styled-components";
 
@@ -93,40 +93,40 @@ const Price = styled.div`
   `
 
 const ProductCard = ({ item }) => {
-  function formatPrice(price) {
-    return price.toLocaleString('vn-VN', {
-      style: 'currency',
-      currency: 'VND'
-    });
-  }
+	function formatPrice(price) {
+		return price.toLocaleString('vn-VN', {
+			style: 'currency',
+			currency: 'VND'
+		});
+	}
 
-  return (
-    <Container>
-      <ItemInfo>
-        <Name>
-          {item.name}
-        </Name>
-      </ItemInfo>
-        <Image src={item.imgUrl} />
-      <ItemInfo>
-        <Price>
-          {formatPrice(item.price)}
-        </Price>
-      </ItemInfo>
-      <Info>
-        <Icon onClick={() => alert("Added to cart")}>
-          <ShoppingCartOutlined />
-        </Icon>
-        <Icon onClick={() => alert("Nothing")}>
-          <SearchOutlined />
-        </Icon>
-        <Icon onClick={() => alert("Added to favorite")}>
-          <FavoriteBorderOutlined />
-        </Icon>
+	return (
+		<Container>
+			<ItemInfo>
+				<Name>
+					{item.name}
+				</Name>
+			</ItemInfo>
+			<Image src={item.imgUrl} />
+			<ItemInfo>
+				<Price>
+					{formatPrice(item.price)}
+				</Price>
+			</ItemInfo>
+			<Info>
+				<Icon onClick={() => alert("Added to cart")}>
+					<ShoppingCartOutlined />
+				</Icon>
+				<Icon onClick={() => alert("Nothing")}>
+					<SearchOutlined />
+				</Icon>
+				<Icon onClick={() => alert("Added to favorite")}>
+					<FavoriteBorderOutlined />
+				</Icon>
 
-      </Info>
-    </Container>
-  );
+			</Info>
+		</Container>
+	);
 };
 
 export default ProductCard;

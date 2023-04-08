@@ -22,9 +22,22 @@ const Wrapper = styled.div`
 `;
 
 const Left = styled.div`
+    display: flex;
+    align-items: center;
+    margin-right: 300px;
+`;
+
+const Center = styled.div`
+    flex: 1;
+    text-align: center;
+`;
+
+const Right = styled.div`
     flex: 1;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    margin-left: 100px;
 `;
 
 /**
@@ -52,22 +65,10 @@ const Input = {
     width: '90%'
 };
 
-const Center = styled.div`
-    flex: 1;
-    text-align: center;
-`;
-
 const Logo = styled.h2`
     font-weight: bold;
     cursor: pointer;
     color: white;
-`;
-
-const Right = styled.div`
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
 `;
 
 const MenuItem = styled.div`
@@ -77,7 +78,6 @@ const MenuItem = styled.div`
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    margin: 0px 15px 0px 15px;
     align-items: center;
     text-align: center;
 `;
@@ -113,11 +113,11 @@ const Header = () => {
                                 name="item"
                                 style={Input}
                             />
-                            <Right>
+                            <Center>
                                 <SearchButton type="submit">
                                     Search
                                 </SearchButton>
-                            </Right>
+                            </Center>
                         </SearchContainer>
                     </form>
                 </Center>

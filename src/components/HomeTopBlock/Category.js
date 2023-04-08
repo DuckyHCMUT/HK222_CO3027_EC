@@ -9,7 +9,9 @@ const CategoryBox = styled.div`
     line-height: 1.5;
     padding-left: 10px;
     padding-bottom: 5px;
-    box-sizing: inherit;
+    box-sizing: inherit;&:hover{
+        background-color: #f8f4f4;
+    }
 `
 
 const CategoryName = styled.span`
