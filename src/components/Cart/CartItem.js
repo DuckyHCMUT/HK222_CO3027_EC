@@ -1,5 +1,8 @@
 import styled from "styled-components";
+import axios from "axios";
+
 import { formatPrice } from "../../utility/utility";
+import { apiKey, sampleAccountId } from "../../api/ApiKey";
 
 const Product = styled.div`
     display: flex;
@@ -62,8 +65,44 @@ const ProductPrice = styled.div`
 `;
 
 const CartItem = ({ item }) => {
-    const handleCount = (quantity, option) => {
+    let path = apiKey + 'cart/' + sampleAccountId;
 
+    const handleDeleteItem = () => {
+        let body = JSON.stringify({
+            "cartItemId": item._id
+        });
+
+        axios.delete(path, {
+            headers: { "Content-Type": "application/json" }, data: body
+        })
+            .then(response => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const handleCount = (quantity) => {
+        if (quantity <= 0){
+            handleDeleteItem();
+            return;
+        }
+
+        let body = JSON.stringify({
+            "cartItemId": item._id,
+            "quantity": quantity
+        });
+
+        axios.put(path, body, {
+            headers: { "Content-Type": "application/json" },
+        })
+            .then(response => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     return (
@@ -85,10 +124,10 @@ const CartItem = ({ item }) => {
                     </ProductPrice>
                 </Details>
                 <ProductAmountContainer>
-                    <AmountButton onClick={() => handleCount(0, item.optionId)}>Remove</AmountButton>
-                    <AmountButton onClick={() => handleCount(item.quantity - 1, item.optionId)}>-</AmountButton>
+                    <AmountButton onClick={() => handleDeleteItem()}>Remove</AmountButton>
+                    <AmountButton onClick={() => handleCount(item.quantity - 1)}>-</AmountButton>
                     <AmountButton>{item.quantity}</AmountButton>
-                    <AmountButton onClick={() => handleCount(item.quantity + 1, item.optionId)}>+</AmountButton>
+                    <AmountButton onClick={() => handleCount(item.quantity + 1)}>+</AmountButton>
                 </ProductAmountContainer>
             </ProductDetail>
         </Product>

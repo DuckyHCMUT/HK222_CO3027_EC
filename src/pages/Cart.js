@@ -1,10 +1,12 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import Header from "../components/Header";
-import { useEffect, useState } from "react";
-import CartItem from "../components/Cart/CartItem";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import Header from "../components/Header";
+import CartItem from "../components/Cart/CartItem";
 import { formatPrice } from "../utility/utility";
+import { apiKey, sampleAccountId } from "../api/ApiKey";
 
 const Container = styled.div`
     display: flex;
@@ -72,8 +74,20 @@ const Cart = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalItemsCount, setTotalItemsCount] = useState(0);
 
+    const handleItemCount = (items) => {
+        if (items.length === 0) {
+            return 0;
+        }
+        if (items.length === 1) {
+            return items[0].quantity;
+        }
+        return items.reduce(function (a, b) {
+            return a['quantity'] + b['quantity'];
+        })
+    }
+
     useEffect(() => {
-        axios.get("https://ecom-be.vercel.app/cart/642ea67308be7d000814453f")
+        axios.get(apiKey + 'cart/' + sampleAccountId)
             .then(response => {
                 console.log(response.data.data);
                 if (response.data.msg === "Successful") {
@@ -82,16 +96,14 @@ const Cart = () => {
 
                     setCartItems(items);
                     setTotalAmount(formatPrice(bill));
-                    setTotalItemsCount(items.reduce(function (a, b) {
-                        return a['quantity'] + b['quantity'];
-                    }));
+                    setTotalItemsCount(handleItemCount(items));
                 }
             })
             .catch(error => {
                 console.log(error);
             });
     }, []);
-
+    
     return (
         <div>
             <Header />
@@ -100,7 +112,7 @@ const Cart = () => {
             <Container>
                 <CartWrapper>
                     {cartItems.map((item) => (
-                        <CartItem key={item.name} item={item} />
+                        <CartItem key={item._id} item={item} />
                     ))}
                 </CartWrapper>
                 <Summary>

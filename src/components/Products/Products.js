@@ -2,7 +2,7 @@ import styled from "styled-components";
 import ProductCard from "./ProductCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import apiKey from "../../api/ApiKey";
+import { apiKey } from "../../api/ApiKey";
 
 const Container = styled.div`
     display: flex;
@@ -24,7 +24,7 @@ const Products = ({ query }) => {
     }
 
     useEffect(() => {
-        axios.get(apiKey + '/items')
+        axios.get(apiKey + 'items')
             .then(response => {
                 setFilteredItem(filterOnSearchValue(response.data.data));
             })
