@@ -4,6 +4,7 @@ import {
 	ShoppingCartOutlined,
 } from "@material-ui/icons";
 import styled from "styled-components";
+import { formatPrice } from "../../utility/utility";
 
 const Info = styled.div`
     flex: 3;
@@ -93,13 +94,6 @@ const Price = styled.div`
   `
 
 const ProductCard = ({ item }) => {
-	function formatPrice(price) {
-		return price.toLocaleString('vn-VN', {
-			style: 'currency',
-			currency: 'VND'
-		});
-	}
-
 	return (
 		<Container>
 			<ItemInfo>

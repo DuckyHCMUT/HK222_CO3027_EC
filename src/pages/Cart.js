@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import CartItem from "../components/Cart/CartItem";
 import axios from "axios";
+import { formatPrice } from "../utility/utility";
 
 const Container = styled.div`
     display: flex;
@@ -69,19 +70,21 @@ const Button = styled.button`
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
+    const [totalItemsCount, setTotalItemsCount] = useState(0);
 
     useEffect(() => {
         axios.get("https://ecom-be.vercel.app/cart/642ea67308be7d000814453f")
             .then(response => {
                 console.log(response.data.data);
                 if (response.data.msg === "Successful") {
-                    setCartItems(response.data.data.items);
-                    setTotalAmount(response.data.data.bill
-                        .toLocaleString('vn-VN', {
-                            style: 'currency',
-                            currency: 'VND'
-                        })
-                    );
+                    let items = response.data.data.items;
+                    let bill = response.data.data.bill;
+
+                    setCartItems(items);
+                    setTotalAmount(formatPrice(bill));
+                    setTotalItemsCount(items.reduce(function (a, b) {
+                        return a['quantity'] + b['quantity'];
+                    }));
                 }
             })
             .catch(error => {
@@ -104,7 +107,7 @@ const Cart = () => {
                     <SummaryTitle>SUMMARY</SummaryTitle>
                     <SummaryItem>
                         <SummaryItemText>Items:</SummaryItemText>
-                        <SummaryItemPrice>{0}</SummaryItemPrice>
+                        <SummaryItemPrice> {totalItemsCount} </SummaryItemPrice>
                     </SummaryItem>
                     <SummaryItem type="total">
                         <SummaryItemText> Total </SummaryItemText>

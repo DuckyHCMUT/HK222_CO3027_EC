@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { formatPrice } from "../../utility/utility";
 
 const Product = styled.div`
     display: flex;
@@ -33,19 +33,11 @@ const ProductName = styled.span``;
 const ProductOption = styled.span``;
 const ProductColor = styled.span``;
 
-
-const PriceDetail = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`;
-
 const ProductAmountContainer = styled.div`
     display: flex;
     position: relative;
     margin-left: auto;
+    align-items: flex-start;
 `;
 
 const AmountButton = styled.button`
@@ -59,7 +51,7 @@ const AmountButton = styled.button`
 	padding: 10px;
 	font-weight: bold;
     display: inline-block;
-    margin:5px;
+    margin: 5px;
     &:hover{
         background-color: #f8f4f4;
     }
@@ -68,7 +60,6 @@ const ProductPrice = styled.div`
     font-size: 15px;
     color: red;
 `;
-const SummaryItemText = styled.span``;
 
 const CartItem = ({ item }) => {
     const handleCount = (quantity, option) => {
@@ -90,25 +81,14 @@ const CartItem = ({ item }) => {
                         <b>Color:</b> {item.colorOption}
                     </ProductColor>
                     <ProductPrice>
-                        <b>Price: </b> {item.price}
+                        <b>Price: </b> {formatPrice(item.price)}
                     </ProductPrice>
                 </Details>
                 <ProductAmountContainer>
-                    <Link to="/user/cart">
-                        <AmountButton onClick={() => handleCount(0, item.optionId)}>Remove</AmountButton>
-                    </Link>
-
-                    <Link to="/user/cart">
-                        <AmountButton onClick={() => handleCount(item.quantity - 1, item.optionId)}>-</AmountButton>
-                    </Link>
-
-                    <Link style={{ color: "inherit", textDecoration: "inherit" }}>
-                        <AmountButton>{item.quantity}</AmountButton>
-                    </Link>
-
-                    <Link to="/user/cart">
-                        <AmountButton onClick={() => handleCount(item.quantity + 1, item.optionId)}>+</AmountButton>
-                    </Link>
+                    <AmountButton onClick={() => handleCount(0, item.optionId)}>Remove</AmountButton>
+                    <AmountButton onClick={() => handleCount(item.quantity - 1, item.optionId)}>-</AmountButton>
+                    <AmountButton>{item.quantity}</AmountButton>
+                    <AmountButton onClick={() => handleCount(item.quantity + 1, item.optionId)}>+</AmountButton>
                 </ProductAmountContainer>
             </ProductDetail>
         </Product>
