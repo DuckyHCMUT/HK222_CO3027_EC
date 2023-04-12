@@ -2,7 +2,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 import { formatPrice } from "../../utility/utility";
-import { apiKey, sampleAccountId } from "../../api/ApiKey";
+import { apiKey } from "../../api/ApiKey";
 
 const Product = styled.div`
     display: flex;
@@ -65,7 +65,8 @@ const ProductPrice = styled.div`
 `;
 
 const CartItem = ({ item }) => {
-    let path = apiKey + 'cart/' + sampleAccountId;
+    let currentUser = JSON.parse(sessionStorage['user']);
+    let path = apiKey + 'cart/' + currentUser.id;
 
     const handleDeleteItem = () => {
         let body = JSON.stringify({
@@ -84,7 +85,7 @@ const CartItem = ({ item }) => {
     }
 
     const handleCount = (quantity) => {
-        if (quantity <= 0){
+        if (quantity <= 0) {
             handleDeleteItem();
             return;
         }

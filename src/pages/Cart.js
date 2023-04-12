@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import CartItem from "../components/Cart/CartItem";
 import { formatPrice } from "../utility/utility";
-import { apiKey, sampleAccountId } from "../api/ApiKey";
+import { apiKey } from "../api/ApiKey";
 
 const Container = styled.div`
     display: flex;
@@ -74,6 +74,9 @@ const Cart = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalItemsCount, setTotalItemsCount] = useState(0);
 
+    // User information
+    let currentUser = JSON.parse(sessionStorage['user']);
+
     const handleItemCount = (items) => {
         if (items.length === 0) {
             return 0;
@@ -87,7 +90,7 @@ const Cart = () => {
     }
 
     useEffect(() => {
-        axios.get(apiKey + 'cart/' + sampleAccountId)
+        axios.get(apiKey + 'cart/' + currentUser.id)
             .then(response => {
                 console.log(response.data.data);
                 if (response.data.msg === "Successful") {
@@ -103,17 +106,18 @@ const Cart = () => {
                 console.log(error);
             });
     }, []);
-    
+
     return (
         <div>
-            <Header />
+            <Header user={sessionStorage['user']} />
             <TopTexts><Link to="/">Home</Link> {'>'} <Link to="/cart">Cart</Link></TopTexts>
             <Hr />
             <Container>
                 <CartWrapper>
-                    {cartItems.map((item) => (
-                        <CartItem key={item._id} item={item} />
-                    ))}
+                    {cartItems ?
+                        cartItems.map((item) => (
+                            <CartItem key={item._id} item={item} />
+                        )) : 'Your cart is current empty :)'}
                 </CartWrapper>
                 <Summary>
                     <SummaryTitle>SUMMARY</SummaryTitle>

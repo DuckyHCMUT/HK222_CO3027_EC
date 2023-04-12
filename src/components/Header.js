@@ -7,6 +7,7 @@ import {
 } from "@material-ui/icons";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { isLoggedIn } from "../utility/utility";
 
 const Container = styled.div`
     height: 100%;
@@ -92,7 +93,80 @@ const LoginWrapper = styled.div`
     border-radius: 10px;
 `
 
-const Header = () => {
+
+const NotLoggedInHeader = () => {
+    return (
+        <Container>
+            <Wrapper>
+                <Left>
+                    <Link style={{ textDecoration: 'none' }}
+                        to="/">
+                        <Logo>Store</Logo>
+                    </Link>
+                </Left>
+                <Center>
+                    <form action="/searchResult/" method="get">
+                        <SearchContainer>
+                            <label htmlFor="header-search" />
+                            <input
+                                type="text"
+                                id="header-search"
+                                placeholder="Search item"
+                                name="item"
+                                style={Input}
+                            />
+                            <Center>
+                                <SearchButton type="submit">
+                                    Search
+                                </SearchButton>
+                            </Center>
+                        </SearchContainer>
+                    </form>
+                </Center>
+                <Right>
+                    <MenuItem>
+                        <PhoneOutlined />
+                        Contact
+                    </MenuItem>
+                    <MenuItem>
+                        <LocationOnOutlined />
+                        Stores
+                    </MenuItem>
+                    <MenuItem>
+                        <LocalOfferOutlined />
+                        Promotion
+                    </MenuItem>
+                    <Link to="/login"
+                        style={{ color: "inherit", textDecoration: "inherit" }}
+                    >
+                        <MenuItem>
+                            <ShoppingCartOutlined />
+                            Cart
+                        </MenuItem>
+                    </Link>
+                    <Link
+                        to="/login"
+                        style={{
+                            color: "inherit",
+                            textDecoration: "inherit",
+                        }}
+                    >
+                        <MenuItem>
+                            <LoginWrapper>
+                                <AccountCircleOutlined />
+                                Login
+                            </LoginWrapper>
+                        </MenuItem>
+                    </Link>
+                </Right>
+            </Wrapper>
+        </Container>
+    );
+};
+
+const LoggedInHeader = (user) => {
+    let currentUser = JSON.parse(user);
+
     return (
         <Container>
             <Wrapper>
@@ -142,24 +216,24 @@ const Header = () => {
                             Cart
                         </MenuItem>
                     </Link>
-                    <Link
-                        to="/login"
-                        style={{
-                            color: "inherit",
-                            textDecoration: "inherit",
-                        }}
-                    >
-                        <MenuItem>
-                            <LoginWrapper>
-                                <AccountCircleOutlined />
-                                Login
-                            </LoginWrapper>
-                        </MenuItem>
-                    </Link>
+                    <MenuItem>
+                        <LoginWrapper>
+                            <AccountCircleOutlined />
+                            Welcome, {currentUser.name}!
+                        </LoginWrapper>
+                    </MenuItem>
                 </Right>
             </Wrapper>
         </Container>
     );
+}
+
+const Header = ({ user }) => {
+    if (isLoggedIn(user)) {
+        return LoggedInHeader(user);
+    } else {
+        return NotLoggedInHeader();
+    }
 };
 
 export default Header;
