@@ -73,6 +73,7 @@ const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalItemsCount, setTotalItemsCount] = useState(0);
+    const [reloadCart, setReloadCart] = useState(false);
 
     // User information
     let currentUser = JSON.parse(sessionStorage['user']);
@@ -100,12 +101,18 @@ const Cart = () => {
                     setCartItems(items);
                     setTotalAmount(formatPrice(bill));
                     setTotalItemsCount(handleItemCount(items));
+                } else if (response.data.msg === "Cart not found") {
+                    setCartItems([]);
+                    setTotalAmount(0);
+                    setTotalItemsCount(0);
+                } else {
+                    alert("Get cart failed");
                 }
             })
             .catch(error => {
                 console.log(error);
             });
-    }, []);
+    }, [reloadCart]);
 
     return (
         <div>
@@ -116,7 +123,7 @@ const Cart = () => {
                 <CartWrapper>
                     {cartItems ?
                         cartItems.map((item) => (
-                            <CartItem key={item._id} item={item} />
+                            <CartItem key={item._id} item={item} reloadCart={() => setReloadCart(!reloadCart)} />
                         )) : 'Your cart is current empty :)'}
                 </CartWrapper>
                 <Summary>

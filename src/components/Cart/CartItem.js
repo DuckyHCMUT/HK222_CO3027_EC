@@ -64,7 +64,7 @@ const ProductPrice = styled.div`
     color: red;
 `;
 
-const CartItem = ({ item }) => {
+const CartItem = ({ item, reloadCart }) => {
     let currentUser = JSON.parse(sessionStorage['user']);
     let path = apiKey + 'cart/' + currentUser.id;
 
@@ -78,6 +78,7 @@ const CartItem = ({ item }) => {
         })
             .then(response => {
                 console.log(response);
+                reloadCart();
             })
             .catch((error) => {
                 console.log(error);
@@ -100,6 +101,7 @@ const CartItem = ({ item }) => {
         })
             .then(response => {
                 console.log(response);
+                reloadCart();
             })
             .catch((error) => {
                 console.log(error);
