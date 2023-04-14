@@ -1,10 +1,12 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import Header from "../components/Header";
-import { useEffect, useState } from "react";
-import CartItem from "../components/Cart/CartItem";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import Header from "../components/Header";
+import CartItem from "../components/Cart/CartItem";
 import { formatPrice } from "../utility/utility";
+import { apiKey } from "../api/ApiKey";
 
 const Container = styled.div`
     display: flex;
@@ -71,9 +73,25 @@ const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalItemsCount, setTotalItemsCount] = useState(0);
+    const [reloadCart, setReloadCart] = useState(false);
+
+    // User information
+    let currentUser = JSON.parse(sessionStorage['user']);
+
+    const handleItemCount = (items) => {
+        if (items.length === 0) {
+            return 0;
+        }
+        if (items.length === 1) {
+            return items[0].quantity;
+        }
+        return items.reduce(function (a, b) {
+            return a['quantity'] + b['quantity'];
+        })
+    }
 
     useEffect(() => {
-        axios.get("https://ecom-be.vercel.app/cart/642ea67308be7d000814453f")
+        axios.get(apiKey + 'cart/' + currentUser.id)
             .then(response => {
                 console.log(response.data.data);
                 if (response.data.msg === "Successful") {
@@ -82,26 +100,31 @@ const Cart = () => {
 
                     setCartItems(items);
                     setTotalAmount(formatPrice(bill));
-                    setTotalItemsCount(items.reduce(function (a, b) {
-                        return a['quantity'] + b['quantity'];
-                    }));
+                    setTotalItemsCount(handleItemCount(items));
+                } else if (response.data.msg === "Cart not found") {
+                    setCartItems([]);
+                    setTotalAmount(0);
+                    setTotalItemsCount(0);
+                } else {
+                    alert("Get cart failed");
                 }
             })
             .catch(error => {
                 console.log(error);
             });
-    }, []);
+    }, [reloadCart]);
 
     return (
         <div>
-            <Header />
+            <Header user={sessionStorage['user']} />
             <TopTexts><Link to="/">Home</Link> {'>'} <Link to="/cart">Cart</Link></TopTexts>
             <Hr />
             <Container>
                 <CartWrapper>
-                    {cartItems.map((item) => (
-                        <CartItem key={item.name} item={item} />
-                    ))}
+                    {cartItems ?
+                        cartItems.map((item) => (
+                            <CartItem key={item._id} item={item} reloadCart={() => setReloadCart(!reloadCart)} />
+                        )) : 'Your cart is current empty :)'}
                 </CartWrapper>
                 <Summary>
                     <SummaryTitle>SUMMARY</SummaryTitle>

@@ -1,0 +1,1 @@
+export const apiKey = "https://ecom-be.vercel.app/";

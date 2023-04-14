@@ -4,3 +4,7 @@ export function formatPrice(price) {
         currency: 'VND'
     });
 };
+
+export function isLoggedIn(user) {
+    return Object.keys(JSON.parse(user)).length !== 0;
+}
