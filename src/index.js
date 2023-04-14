@@ -7,6 +7,7 @@ import './index.css';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import SearchResult from './pages/SearchResult';
+import ProductDetail from './pages/ProductDetail';
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="searchResult" element={<SearchResult />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="products/:productId" element={<ProductDetail/>} />
       </Routes>
     </BrowserRouter>
   );
