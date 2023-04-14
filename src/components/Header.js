@@ -1,10 +1,9 @@
-import {
-    ShoppingCartOutlined,
-    PhoneOutlined,
-    AccountCircleOutlined,
-    LocalOfferOutlined,
-    LocationOnOutlined
-} from "@material-ui/icons";
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { isLoggedIn } from "../utility/utility";
@@ -125,22 +124,22 @@ const NotLoggedInHeader = () => {
                 </Center>
                 <Right>
                     <MenuItem>
-                        <PhoneOutlined />
+                        <LocalPhoneOutlinedIcon />
                         Contact
                     </MenuItem>
                     <MenuItem>
-                        <LocationOnOutlined />
+                        <LocationOnOutlinedIcon />
                         Stores
                     </MenuItem>
                     <MenuItem>
-                        <LocalOfferOutlined />
+                        <LocalOfferOutlinedIcon />
                         Promotion
                     </MenuItem>
                     <Link to="/login"
                         style={{ color: "inherit", textDecoration: "inherit" }}
                     >
                         <MenuItem>
-                            <ShoppingCartOutlined />
+                            <ShoppingCartOutlinedIcon />
                             Cart
                         </MenuItem>
                     </Link>
@@ -153,7 +152,7 @@ const NotLoggedInHeader = () => {
                     >
                         <MenuItem>
                             <LoginWrapper>
-                                <AccountCircleOutlined />
+                                <AccountCircleOutlinedIcon />
                                 Login
                             </LoginWrapper>
                         </MenuItem>
@@ -197,28 +196,28 @@ const LoggedInHeader = (user) => {
                 </Center>
                 <Right>
                     <MenuItem>
-                        <PhoneOutlined />
+                        <LocalPhoneOutlinedIcon />
                         Contact
                     </MenuItem>
                     <MenuItem>
-                        <LocationOnOutlined />
+                        <LocationOnOutlinedIcon />
                         Stores
                     </MenuItem>
                     <MenuItem>
-                        <LocalOfferOutlined />
+                        <LocalOfferOutlinedIcon />
                         Promotion
                     </MenuItem>
                     <Link to="/cart"
                         style={{ color: "inherit", textDecoration: "inherit" }}
                     >
                         <MenuItem>
-                            <ShoppingCartOutlined />
+                            <ShoppingCartOutlinedIcon />
                             Cart
                         </MenuItem>
                     </Link>
                     <MenuItem>
                         <LoginWrapper>
-                            <AccountCircleOutlined />
+                            <AccountCircleOutlinedIcon />
                             Welcome, {currentUser.name}!
                         </LoginWrapper>
                     </MenuItem>
