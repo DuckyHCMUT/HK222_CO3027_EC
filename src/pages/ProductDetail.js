@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Header from "../components/Header";
 import { apiKey } from "../api/ApiKey";
 import { formatPrice, isLoggedIn } from "../utility/utility";
+import Swal from "sweetalert2";
 
 const Container = styled.div`
     display: flex;
@@ -51,28 +52,28 @@ const ProductImage = styled.img`
 
 const ProductDescriptionWrapper = styled.div`
     margin: 20px;
-`
+`;
 
 const ProductDescription = styled.span`
     display: flex;
     flex-direction: column;
     color: white;
-`
+`;
 
 const ProductOptionContainer = styled.div`
 
-`
+`;
 
 const ProductPrice = styled.div`
     color: #d70018;
     display: inline-block;
     font-size: 1.1em;
     font-weight: 700;
-`
+`;
 
 const ProductOptionWrapper = styled.div`
     display: flex;
-`
+`;
 
 const ProductOption = styled.a`
     border: 0;
@@ -88,11 +89,11 @@ const ProductOption = styled.a`
     &:hover{
         background-color: #f8f4f4;
     }
-`
+`;
 
 const ProductOptionImage = styled.img`
     max-height: 3em;
-`
+`;
 
 const Button = styled.button`
     background-image: linear-gradient(to right, #314755 0%, #26a0da  51%, #314755  100%);
@@ -107,7 +108,7 @@ const Button = styled.button`
     box-shadow: 0 0 20px #eee;
     font-size: 18px;
     border-radius: 10px;
-    cursor: pointer;
+    cursor: pointer;;
     display: block;
     &:hover{
         background-position: right center; /* change the direction of the change here */
@@ -127,19 +128,65 @@ const ProductDetail = () => {
     const handleStorageChange = (option) => {
         setSelectedStorage(option);
         setCurrentPrice(option.price);
-    };
+    }
 
     const handleColorChange = (option) => {
         setSelectedColor(option);
     }
 
+    const alertOnNotLoggedIn = () => {
+        Swal.fire({
+            title: 'Login required!',
+            text: "Please login before adding this item to your cart.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Login now'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = "/login";
+            }
+        });
+    }
+
+    const alertOnAddSuccess = (name, storage, color) => {
+        let message = `<b>${name} (${storage}, ${color})</b> has been added to your cart.`;
+
+        Swal.fire({
+            title: 'Success!',
+            icon: 'success',
+            html: message,
+            showCancelButton: true,
+            cancelButtonText: 'I want to checkout',
+            cancelButtonColor: '#fe9800',
+            showConfirmButton: true,
+            confirmButtonText: 'I want to buy more',
+            confirmButtonColor: '#0d82cc',
+            focusConfirm: true
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.cancel) {
+                window.location = ('/cart');
+            }
+        });
+    }
+
+    const alertOnAddFailed = (error) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error...',
+            text: 'Something went wrong while adding to cart!'
+        }).then((error) => {
+            console.log(error);
+        });
+    }
+
     const handleAddToCart = () => {
         if (!isLoggedIn(sessionStorage['user'])) {
             // Alert prompting the user to login first
+            alertOnNotLoggedIn();
         } else {
-            console.log(selectedColor, selectedStorage);
             let user = JSON.parse(sessionStorage['user']);
-            console.log(user.id);
             axios.post(apiKey + 'cart/' + user.id, {
                 "productId": productId,
                 "storageOption": selectedStorage.name,
@@ -147,6 +194,11 @@ const ProductDetail = () => {
                 "quantity": 1
             }).then((response) => {
                 console.log(response);
+                if (response.status === 200 && response.data.msg === "Successful") {
+                    alertOnAddSuccess(productInfo.name, selectedStorage.name, selectedColor.name);
+                } else {
+                    alertOnAddFailed(response);
+                }
             }).catch((error) => {
                 console.log(error);
             })
