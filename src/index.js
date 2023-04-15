@@ -11,17 +11,22 @@ import ProductDetail from './pages/ProductDetail';
 
 
 export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route index element={<Home />} />
-        <Route path="searchResult" element={<SearchResult />} />
-        <Route path="cart" element={<Cart />} />
-        <Route path="products/:productId" element={<ProductDetail/>} />
-      </Routes>
-    </BrowserRouter>
-  );
+	// Initially set the user token
+	if (sessionStorage.hasOwnProperty('user') === false) {
+		sessionStorage.setItem('user', '{}');
+	}
+
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<App />} />
+				<Route index element={<Home />} />
+				<Route path="searchResult" element={<SearchResult />} />
+				<Route path="cart" element={<Cart />} />
+				<Route path="products/:productId" element={<ProductDetail />} />
+			</Routes>
+		</BrowserRouter>
+	);
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

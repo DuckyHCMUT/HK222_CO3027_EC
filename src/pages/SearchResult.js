@@ -7,7 +7,7 @@ const SearchResult = () => {
 
     return (
         <div>
-            <Header />
+            <Header user={sessionStorage['user']} />
             <SearchedContent value={query} />
         </div>
     );

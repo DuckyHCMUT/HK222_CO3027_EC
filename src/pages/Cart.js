@@ -86,8 +86,8 @@ const Cart = () => {
             return items[0].quantity;
         }
         return items.reduce(function (a, b) {
-            return a['quantity'] + b['quantity'];
-        })
+            return a + b['quantity'];
+        }, 0);
     }
 
     useEffect(() => {
