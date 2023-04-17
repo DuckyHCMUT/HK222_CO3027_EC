@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import SearchResult from './pages/SearchResult';
 import ProductDetail from './pages/ProductDetail';
+import Login from './pages/Login';
 
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
 				<Route path="searchResult" element={<SearchResult />} />
 				<Route path="cart" element={<Cart />} />
 				<Route path="products/:productId" element={<ProductDetail />} />
+				<Route path="login" element={<Login />} />
 			</Routes>
 		</BrowserRouter>
 	);
