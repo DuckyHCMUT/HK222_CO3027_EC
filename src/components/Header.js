@@ -7,6 +7,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { isLoggedIn } from "../utility/utility";
+import { useState } from 'react';
 
 const Container = styled.div`
     height: 100%;
@@ -90,7 +91,31 @@ const LoginWrapper = styled.div`
     text-align: center;
     border: 1px solid #000000;
     border-radius: 10px;
-`
+`;
+
+const DropDownContainer = styled.div`
+    font-size: 1em; 
+    font-weight: 400; 
+    position: absolute; 
+    top: 85%; 
+    z-index: 20; 
+    display: block; 
+    left: auto; 
+    min-width: 10rem;
+    border-radius: 10px;
+    border: 1px solid #000000; 
+    background: rgba(255, 247, 247, 0.6);
+`;
+
+const Dropdown = styled.div`
+    color: black;
+    padding: 5px;
+    border-bottom: 1px solid #000000; 
+`;
+
+const Hr = styled.hr`
+    background-color: black;
+`;
 
 
 const NotLoggedInHeader = () => {
@@ -165,6 +190,18 @@ const NotLoggedInHeader = () => {
 
 const LoggedInHeader = (user) => {
     let currentUser = JSON.parse(user);
+    const [dropDownStatus, setDropDownStatus] = useState(false);
+
+    const openDropDown = () => setDropDownStatus(!dropDownStatus);
+
+    const handleLogout = () => {
+        // Void the session
+        sessionStorage.setItem('user', '{}');
+        sessionStorage.setItem('token', '');
+    
+        // Immediately refresh the page
+        window.location.reload();
+    }
 
     return (
         <Container>
@@ -216,10 +253,26 @@ const LoggedInHeader = (user) => {
                         </MenuItem>
                     </Link>
                     <MenuItem>
-                        <LoginWrapper>
+                        <LoginWrapper onClick={() => openDropDown()}>
                             <AccountCircleOutlinedIcon />
                             Welcome, {currentUser.name}!
                         </LoginWrapper>
+                        {dropDownStatus ? (
+                            <DropDownContainer>
+                                <Dropdown>
+                                    View orders
+                                </Dropdown>
+                                <Dropdown>
+                                    View account
+                                </Dropdown>
+                                <Dropdown
+                                    style={{ "border-bottom": "0px" }}
+                                    onClick={() => handleLogout()}
+                                >
+                                    Log out
+                                </Dropdown>
+                            </DropDownContainer>
+                        ) : null}
                     </MenuItem>
                 </Right>
             </Wrapper>
