@@ -246,7 +246,7 @@ const LoggedInHeader = (user) => {
                     <MenuItem>
                         <LoginWrapper onClick={() => openDropDown()}>
                             <AccountCircleOutlinedIcon />
-                            Welcome, {currentUser.name}!
+                            Welcome, {currentUser.name.length > 9 ? currentUser.name.slice(0, 9) + "..." : currentUser.name}!
                         </LoginWrapper>
                         {dropDownStatus ? (
                             <DropDownContainer>

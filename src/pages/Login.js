@@ -6,6 +6,7 @@ import { apiKey } from '../api/ApiKey';
 import { useState } from 'react';
 import { isLoggedIn } from '../utility/utility';
 import Header from '../components/Header';
+import { Link } from 'react-router-dom';
 
 
 const Container = styled.div`
@@ -41,17 +42,14 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-	flex: 1;
-	width: 100%;
 	margin-top: 10px;
 	font-size: 16px;
 	border-radius: 5px;
+	width: 20vw;
 `;
 
 const InputContainer = styled.div`
-	margin: 20px 0px;
-	min-width: 40%;
-	width: 100%;
+	margin: 10px;
 `;
 
 const Button = styled.button`
@@ -66,15 +64,23 @@ const Button = styled.button`
 	width: 100%;
 	background-image: linear-gradient(to right, rgb(225 50 50) 0%, rgb(218 154 38 / 58%) 51%, #e51f2b 100%);
 `;
+
 const ForgotPassword = styled.a`
 	font-size: 14px;
 	cursor: pointer;
 	color: black;
 	font-style: italic;
-	float: right;
-	margin-top: 5px;
+	margin: 5px 0px 5px 0px;
+	text-align: right;
 `;
 
+const Hr = styled.hr`
+	background-color: black;
+	height: 0.02vh;
+	width: 35vw;
+`;
+
+const BottomText = styled.span``;
 
 const Login = () => {
 	const [email, setEmail] = useState();
@@ -121,9 +127,9 @@ const Login = () => {
 		return (
 			<div>
 				<Header user={sessionStorage['user']} />
-
 				<Container>
 					<Title>Login as a member</Title>
+					<Hr />
 					<Form onSubmit={handleSubmit}>
 						<InputContainer>
 							<Label>Email address</Label>
@@ -141,10 +147,16 @@ const Login = () => {
 								placeholder="Enter password"
 								onChange={(e) => setPassword(e.target.value)}
 							/>
-							<ForgotPassword>Forgot password?</ForgotPassword>
 						</InputContainer>
+						<ForgotPassword>Forgot password?</ForgotPassword>
 						<Button>Sign in</Button>
 					</Form>
+					<Hr />
+					<BottomText>
+						No account? <Link to={"/register"} style={{ color: "blue", textDecoration: "inherit", marginTop: "20px", fontStyle: "italic" }}>
+							Register now.
+						</Link>
+					</BottomText>
 				</Container>
 			</div>
 		);
