@@ -10,6 +10,8 @@ import SearchResult from './pages/SearchResult';
 import ProductDetail from './pages/ProductDetail';
 import Login from './pages/Login';
 
+import Register from './pages/Register';
+
 
 export default function App() {
 	// Initially set the user token
@@ -26,6 +28,8 @@ export default function App() {
 				<Route path="cart" element={<Cart />} />
 				<Route path="products/:productId" element={<ProductDetail />} />
 				<Route path="login" element={<Login />} />
+				<Route path="register" element={<Register />} />
+
 			</Routes>
 		</BrowserRouter>
 	);
