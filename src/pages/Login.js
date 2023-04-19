@@ -5,31 +5,34 @@ import Swal from 'sweetalert2';
 import { apiKey } from '../api/ApiKey';
 import { useState } from 'react';
 import { isLoggedIn } from '../utility/utility';
+import Header from '../components/Header';
 
 
 const Container = styled.div`
-	background-size: cover;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	align-items: center;
-	border: 1px solid black;
-	margin: 50px;
-	padding: 30px;
+	box-shadow: 0 1px 2px 0 rgba(60,64,67,.1),0 2px 6px 2px rgba(60,64,67,.15);
+	width: 40vw;
+	border-radius: 10px;
+	margin-top: 3vw;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
 `;
 
 const Title = styled.h2`
 	font-size: 25px;
-	font-weight: 700;
-	margin-bottom: 5%;
-	color: black;
-	letter-spacing: 1px;
+	color: #d51010;
+	letter-spacing: 0.5	px;
 	text-align: center;
 `;
 
-const Label = styled.h6`
+const Label = styled.div`
 	font-size: 16px;
 	font-weight: 500;
-	pointer-events: none;
-	display: block;
-	font-weight: 600;
+	margin-bottom: 10px;
 `;
 
 const Form = styled.form`
@@ -42,6 +45,7 @@ const Input = styled.input`
 	width: 100%;
 	margin-top: 10px;
 	font-size: 16px;
+	border-radius: 5px;
 `;
 
 const InputContainer = styled.div`
@@ -64,11 +68,9 @@ const Button = styled.button`
 `;
 const ForgotPassword = styled.a`
 	font-size: 14px;
-	text-decoration: none;
 	cursor: pointer;
-	color: rgba(255, 255, 255, 1);
-	font-weight: bold;
-	display: block;
+	color: black;
+	font-style: italic;
 	float: right;
 	margin-top: 5px;
 `;
@@ -117,30 +119,34 @@ const Login = () => {
 		window.location = "/";
 	} else {
 		return (
-			<Container>
-				<Title>Sign in</Title>
-				<Form onSubmit={handleSubmit}>
-					<InputContainer>
-						<Label>Email address</Label>
-						<Input
-							type="email"
-							placeholder="Enter email"
-							onChange={(e) => setEmail(e.target.value)}
-							autoFocus
-						/>
-					</InputContainer>
-					<InputContainer>
-						<Label>Password</Label>
-						<Input
-							type="password"
-							placeholder="Enter password"
-							onChange={(e) => setPassword(e.target.value)}
-						/>
-						<ForgotPassword>Forgot password?</ForgotPassword>
-					</InputContainer>
-					<Button>Sign in</Button>
-				</Form>
-			</Container>
+			<div>
+				<Header user={sessionStorage['user']} />
+
+				<Container>
+					<Title>Login as a member</Title>
+					<Form onSubmit={handleSubmit}>
+						<InputContainer>
+							<Label>Email address</Label>
+							<Input
+								type="email"
+								placeholder="Enter email"
+								onChange={(e) => setEmail(e.target.value)}
+								autoFocus
+							/>
+						</InputContainer>
+						<InputContainer>
+							<Label>Password</Label>
+							<Input
+								type="password"
+								placeholder="Enter password"
+								onChange={(e) => setPassword(e.target.value)}
+							/>
+							<ForgotPassword>Forgot password?</ForgotPassword>
+						</InputContainer>
+						<Button>Sign in</Button>
+					</Form>
+				</Container>
+			</div>
 		);
 	}
 }
