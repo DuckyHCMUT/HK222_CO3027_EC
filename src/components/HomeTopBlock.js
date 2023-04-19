@@ -7,7 +7,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-`
+`;
 
 const CategoryWrapper = styled.div`
     margin-right: 15px;
@@ -15,7 +15,29 @@ const CategoryWrapper = styled.div`
     box-shadow: 0 1px 2px 0 rgba(60,64,67,.1),0 2px 6px 2px rgba(60,64,67,.15);
     display: block;
     overflow: hidden;
+`;
+
+const AdvertisementWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 `
+
+const Advertisement = styled.div`
+    border-radius: 10px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.1),0 2px 6px 2px rgba(60,64,67,.15);
+    margin-right: auto;
+    width: 20vw;
+    height: 17vh;
+`;
+
+const AdvertisementImg = styled.img`
+    width: 20vw;
+    height: 17vh;
+    object-fit: contain;
+`;
+
+
 
 const HomeTopBlock = () => {
     return (
@@ -25,6 +47,14 @@ const HomeTopBlock = () => {
                 <Category icon={"/icon/accessories.svg"} name={"Accessories"} />
             </CategoryWrapper>
             <Slider />
+            <AdvertisementWrapper>
+                <Advertisement>
+                    <AdvertisementImg src={"/promotion/promotion-1.jpg"}/>
+                </Advertisement>
+                <Advertisement>
+                    <AdvertisementImg src={"/promotion/promotion-2.jpg"}/>
+                </Advertisement>
+            </AdvertisementWrapper>
         </Container>
     );
 }
