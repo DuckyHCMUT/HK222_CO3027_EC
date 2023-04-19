@@ -136,7 +136,7 @@ const Cart = () => {
                         <SummaryItemText> Total </SummaryItemText>
                         <SummaryItemPrice> {totalAmount} </SummaryItemPrice>
                     </SummaryItem>
-                    <Link to="/">
+                    <Link to="/payment">
                         <Button> Checkout </Button>
                     </Link>
                     <Link to="/">
