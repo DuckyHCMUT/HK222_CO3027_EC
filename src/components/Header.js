@@ -6,7 +6,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { isLoggedIn } from "../utility/utility";
+import { isAdmin, isLoggedIn } from "../utility/utility";
 import { useState } from 'react';
 
 const Container = styled.nav`
@@ -185,7 +185,6 @@ const NotLoggedInHeader = () => {
 const LoggedInHeader = (user) => {
     let currentUser = JSON.parse(user);
     const [dropDownStatus, setDropDownStatus] = useState(false);
-    const isAdmin = currentUser.name === "admin" ? true : false;
 
     const openDropDown = () => setDropDownStatus(!dropDownStatus);
 
@@ -250,13 +249,16 @@ const LoggedInHeader = (user) => {
                         </LoginWrapper>
                         {dropDownStatus ? (
                             <DropDownContainer>
-                                <Link
-                                    to="/"
+                                {isAdmin(sessionStorage['user']) ? (<Link
+                                    to="/manageOrders"
                                     style={{ "textDecoration": "inherit" }}>
-                                    <Dropdown>
-                                        {isAdmin ? "Manage all orders" : "View your orders"}
-                                    </Dropdown>
-                                </Link>
+                                    <Dropdown>Manage all orders</Dropdown>
+                                </Link>) : (<Link
+                                    to="/myOrders"
+                                    style={{ "textDecoration": "inherit" }}>
+                                    <Dropdown>View your orders</Dropdown>
+                                </Link>)}
+
                                 <Dropdown>
                                     View account
                                 </Dropdown>
