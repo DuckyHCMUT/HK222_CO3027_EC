@@ -8,3 +8,7 @@ export function formatPrice(price) {
 export function isLoggedIn(user) {
     return Object.keys(JSON.parse(user)).length !== 0;
 }
+
+export function isAdmin(user){
+    return JSON.parse(user).name === "admin";
+}
