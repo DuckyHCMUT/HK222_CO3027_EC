@@ -1,7 +1,7 @@
 import Header from "../../components/Header";
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'; 
 import './payment_style.css';
-// import { apiKey } from '../../api/ApiKey';
+import { apiKey } from '../../api/ApiKey';
 import axios from 'axios';
 
 
@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 
 import { useState, useEffect } from 'react';
 
-const apiKey = "http://localhost:9000/"
+
 
 
 const Payment = () => {
