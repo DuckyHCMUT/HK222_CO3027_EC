@@ -9,49 +9,47 @@ const CategoryBox = styled.div`
     line-height: 1.5;
     padding-left: 10px;
     padding-bottom: 5px;
-    box-sizing: inherit;&:hover{
-        background-color: #f8f4f4;
+    padding-top: 5px;
+    box-sizing: inherit;
+    &:hover {
+        transition: all 0.5s ease 0s;
+        background-color: rgba(255, 0, 0, 0.2);
     }
 `
 
-const CategoryName = styled.span`
-    align-items:center;
+const CategoryName = styled.div`
+    align-items: center;
     font-size: 15px;
     font-weight: bold;
-`
-
-const Right = styled.div`
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
 `
 
 const Logo = styled.img`
     width: 20px;
     height: 20px;
     margin-right: 5px;
+    object-fit: contain;
 `
 
 const Icon = styled.img`
-    width: 15px;
-    height: 15px;
-    margin-left: 20px;
-    margin-right: 5px;
+    width: 1vw;
+    height: 2vh;
+    margin-left: auto;
 `
 
 const Category = ({ icon, name }) => {
+    const filterByCategory = () => {
+        window.location = `searchResult/?branch=${name}`;
+    }
+
     return (
         <Link style={{ textDecoration: 'none' }}
             to="/">
-            <CategoryBox>
+            <CategoryBox onClick={() => filterByCategory()}>
                 <Logo src={icon} />
                 <CategoryName>
-                    {name} 
+                    {name}
                 </CategoryName>
-                <Right>
-                    <Icon src="/icon/right-arrow.png" />
-                </Right>
+                <Icon src="/icon/right-arrow.png" />
             </CategoryBox>
         </Link>
     );

@@ -16,7 +16,7 @@ const ItemInfo = styled.div`
 
 const Container = styled.div`
     flex: 3;
-    margin: 5px 10px 5px 0px;
+    margin: 5px 0px 5px 0px;
     border-radius: 10px;
     box-shadow: 0 1px 2px 0 rgba(60,64,67,.1),0 2px 6px 2px rgba(60,64,67,.15);
     min-width: 280px;
