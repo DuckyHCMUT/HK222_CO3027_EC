@@ -1,6 +1,9 @@
 import Header from "../../components/Header";
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'; 
 import './payment_style.css';
+import { apiKey } from '../../api/ApiKey';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 const paymentSucceded = () => {
   alert("I am an alert box!");
 }
@@ -10,6 +13,32 @@ const Payment = () => {
     alert("Successfully paid!. You will return to home page");
     window.location.href = "/";
   };
+
+  const [cart, setCart] = useState({});
+  let currentUser = JSON.parse(sessionStorage['user']);
+
+
+
+  useEffect(()=> {
+    // Call API to get the cart information
+    axios.get(apiKey + 'cart/' + currentUser.id)
+    .then(response => {
+        console.log(response.data.data);
+        if (response.data.msg === "Successful") {
+            setCart(response.data.data);
+
+        } else if (response.data.msg === "Cart not found") {
+          setCart({
+            bill : 0
+          })
+        } else {
+            alert("Get cart failed");
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    });
+  }, [])
   return (
     <div>
       <Header user={sessionStorage["user"]} />
@@ -24,15 +53,6 @@ const Payment = () => {
               <input
                 type="text"
                 placeholder="Full Name"
-                required
-                className="name"
-              />
-              <i className="fa fa-user icon"></i>
-            </div>
-            <div className="input_box">
-              <input
-                type="text"
-                placeholder="Name on Card"
                 required
                 className="name"
               />
@@ -61,12 +81,12 @@ const Payment = () => {
               <i className="fa fa-map-marker icon" aria-hidden="true"></i>
             </div>
           </div>
-          <div className="input_group">
+          {/* <div className="input_group">
             <div className="input_box">
               <input type="text" placeholder="City" required className="name" />
               <i className="fa fa-institution icon"></i>
             </div>
-          </div>
+          </div> */}
           {/* <!--Account Information End--> */}
 
           {/* <!--DOB & Gender Start--> */}
@@ -159,6 +179,7 @@ const Payment = () => {
               placeholder="100"
               required
               className="name"
+              value = {cart.bill}
             />{" "}
             <i className="fa fa-dollar icon" aria-hidden="true"></i>
           </div>
