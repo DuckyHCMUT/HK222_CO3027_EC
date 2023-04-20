@@ -6,8 +6,8 @@ import styled from "styled-components";
 import { sliderItems } from "../static/sliderItems";
 
 const Container = styled.div`
-    width: 900px;
-    height: 300px;
+    width: 40vw;
+    height: 35vh;
     display: flex;
     position: relative;
     overflow: hidden;
@@ -56,8 +56,8 @@ const ImgContainer = styled.div`
 `;
 
 const Image = styled.img`
-    width: 900px;
-    height: 300px;
+    width: 40vw;
+    height: 35vh;
     object-fit: contain;
 `;
 

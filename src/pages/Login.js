@@ -5,31 +5,35 @@ import Swal from 'sweetalert2';
 import { apiKey } from '../api/ApiKey';
 import { useState } from 'react';
 import { isLoggedIn } from '../utility/utility';
+import Header from '../components/Header';
+import { Link } from 'react-router-dom';
 
 
 const Container = styled.div`
-	background-size: cover;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	align-items: center;
-	border: 1px solid black;
-	margin: 50px;
-	padding: 30px;
+	box-shadow: 0 1px 2px 0 rgba(60,64,67,.1),0 2px 6px 2px rgba(60,64,67,.15);
+	width: 40vw;
+	border-radius: 10px;
+	margin-top: 3vw;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
 `;
 
 const Title = styled.h2`
 	font-size: 25px;
-	font-weight: 700;
-	margin-bottom: 5%;
-	color: black;
-	letter-spacing: 1px;
+	color: #d51010;
+	letter-spacing: 0.5	px;
 	text-align: center;
 `;
 
-const Label = styled.h6`
+const Label = styled.div`
 	font-size: 16px;
 	font-weight: 500;
-	pointer-events: none;
-	display: block;
-	font-weight: 600;
+	margin-bottom: 10px;
 `;
 
 const Form = styled.form`
@@ -38,16 +42,14 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-	flex: 1;
-	width: 100%;
 	margin-top: 10px;
 	font-size: 16px;
+	border-radius: 5px;
+	width: 20vw;
 `;
 
 const InputContainer = styled.div`
-	margin: 20px 0px;
-	min-width: 40%;
-	width: 100%;
+	margin: 10px;
 `;
 
 const Button = styled.button`
@@ -62,17 +64,23 @@ const Button = styled.button`
 	width: 100%;
 	background-image: linear-gradient(to right, rgb(225 50 50) 0%, rgb(218 154 38 / 58%) 51%, #e51f2b 100%);
 `;
+
 const ForgotPassword = styled.a`
 	font-size: 14px;
-	text-decoration: none;
 	cursor: pointer;
-	color: rgba(255, 255, 255, 1);
-	font-weight: bold;
-	display: block;
-	float: right;
-	margin-top: 5px;
+	color: black;
+	font-style: italic;
+	margin: 5px 0px 5px 0px;
+	text-align: right;
 `;
 
+const Hr = styled.hr`
+	background-color: black;
+	height: 0.02vh;
+	width: 35vw;
+`;
+
+const BottomText = styled.span``;
 
 const Login = () => {
 	const [email, setEmail] = useState();
@@ -117,30 +125,40 @@ const Login = () => {
 		window.location = "/";
 	} else {
 		return (
-			<Container>
-				<Title>Sign in</Title>
-				<Form onSubmit={handleSubmit}>
-					<InputContainer>
-						<Label>Email address</Label>
-						<Input
-							type="email"
-							placeholder="Enter email"
-							onChange={(e) => setEmail(e.target.value)}
-							autoFocus
-						/>
-					</InputContainer>
-					<InputContainer>
-						<Label>Password</Label>
-						<Input
-							type="password"
-							placeholder="Enter password"
-							onChange={(e) => setPassword(e.target.value)}
-						/>
+			<div>
+				<Header user={sessionStorage['user']} />
+				<Container>
+					<Title>Login as a member</Title>
+					<Hr />
+					<Form onSubmit={handleSubmit}>
+						<InputContainer>
+							<Label>Email address</Label>
+							<Input
+								type="email"
+								placeholder="Enter email"
+								onChange={(e) => setEmail(e.target.value)}
+								autoFocus
+							/>
+						</InputContainer>
+						<InputContainer>
+							<Label>Password</Label>
+							<Input
+								type="password"
+								placeholder="Enter password"
+								onChange={(e) => setPassword(e.target.value)}
+							/>
+						</InputContainer>
 						<ForgotPassword>Forgot password?</ForgotPassword>
-					</InputContainer>
-					<Button>Sign in</Button>
-				</Form>
-			</Container>
+						<Button>Sign in</Button>
+					</Form>
+					<Hr />
+					<BottomText>
+						No account? <Link to={"/register"} style={{ color: "blue", textDecoration: "inherit", marginTop: "20px", fontStyle: "italic" }}>
+							Register now.
+						</Link>
+					</BottomText>
+				</Container>
+			</div>
 		);
 	}
 }

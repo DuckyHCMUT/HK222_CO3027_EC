@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import Header from "../components/Header";
 import CartItem from "../components/Cart/CartItem";
-import { formatPrice } from "../utility/utility";
+import { formatPrice, isLoggedIn } from "../utility/utility";
 import { apiKey } from "../api/ApiKey";
 
 const Container = styled.div`
@@ -13,7 +13,6 @@ const Container = styled.div`
     flex-direction: row;
     margin-left: 200px;
     margin-right: 200px;
-    position: relative;
     align-items: flex-start;
 `;
 
@@ -35,6 +34,8 @@ const Hr = styled.hr`
 `;
 
 const Summary = styled.div`
+    display: flex;
+    flex-direction: column;
     flex: 1;
     border: 0.5px solid black;
     border-radius: 10px;
@@ -114,6 +115,7 @@ const Cart = () => {
             });
     }, [reloadCart]);
 
+
     return (
         <div>
             <Header user={sessionStorage['user']} />
@@ -146,6 +148,7 @@ const Cart = () => {
             </Container>
         </div>
     );
+
 };
 
 export default Cart;

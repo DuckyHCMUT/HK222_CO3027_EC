@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { isLoggedIn } from "../utility/utility";
 import { useState } from 'react';
 
-const Container = styled.div`
+const Container = styled.nav`
     height: 100%;
 `;
 
@@ -23,22 +23,19 @@ const Wrapper = styled.div`
 `;
 
 const Left = styled.div`
-    display: flex;
-    align-items: center;
-    margin-right: 300px;
+   
 `;
 
 const Center = styled.div`
-    flex: 1;
-    text-align: center;
+    margin-left: 5vw;
 `;
 
 const Right = styled.div`
     flex: 1;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    margin-left: 100px;
+    margin-left: 3vw;
 `;
 
 /**
@@ -46,25 +43,23 @@ const Right = styled.div`
 */
 const SearchButton = styled.button`
     background-color: rgba(255, 255, 255, 0.2);
-    padding: 0.5px 8px;
-    text-align: center;
     color: white;
-    text-decoration: none;
-    display: inline-block;
+    height: 3.8vh;
+    border-radius: 0px 5px 5px 0px;
 `;
 
 const SearchContainer = styled.div`
     display: flex;
     align-items: center;
-    margin-right: 30px;
     width: 100%;
 `;
 
-const Input = {
-    border: '0.5px solid white',
-    borderRadius: "5px 0px 0px 5px",
-    width: '90%'
-};
+const Input = styled.input`
+    border: 0.5px solid white;
+    border-radius: 5px 0px 0px 5px;
+    width: 25vw;
+    height: 3vh;
+`;
 
 const Logo = styled.h2`
     font-weight: bold;
@@ -84,13 +79,17 @@ const MenuItem = styled.div`
 `;
 
 const LoginWrapper = styled.div`
-    background: rgba(255, 247, 247, 0.6);
+    background: linear-gradient(to right, rgb(210 230 144) 0%, rgb(142 203 232) 51%, rgb(105 212 201) 100%);
     color: black;
     padding: 10px;
     display: flex;
     text-align: center;
     border: 1px solid #000000;
     border-radius: 10px;
+    &:hover{
+        color: #ad134e;
+        text-decoration: none;
+    }
 `;
 
 const DropDownContainer = styled.div`
@@ -98,25 +97,24 @@ const DropDownContainer = styled.div`
     font-weight: 400; 
     position: absolute; 
     top: 85%; 
-    z-index: 20; 
-    display: block; 
-    left: auto; 
+    z-index: -1; 
     min-width: 10rem;
     border-radius: 10px;
     border: 1px solid #000000; 
     background: rgba(255, 247, 247, 0.6);
+    overflow: hidden;
 `;
 
 const Dropdown = styled.div`
     color: black;
     padding: 5px;
-    border-bottom: 1px solid #000000; 
+    background: linear-gradient(to right, rgb(210 230 144) 0%, rgb(142 203 232) 51%, rgb(105 212 201) 100%);
+    border-bottom: 1px solid black;
+    &:hover{
+        color: #ad134e;
+        text-decoration: none;
+    }
 `;
-
-const Hr = styled.hr`
-    background-color: black;
-`;
-
 
 const NotLoggedInHeader = () => {
     return (
@@ -131,19 +129,15 @@ const NotLoggedInHeader = () => {
                 <Center>
                     <form action="/searchResult/" method="get">
                         <SearchContainer>
-                            <label htmlFor="header-search" />
-                            <input
+                            <Input
                                 type="text"
                                 id="header-search"
                                 placeholder="Search item"
                                 name="item"
-                                style={Input}
                             />
-                            <Center>
-                                <SearchButton type="submit">
-                                    Search
-                                </SearchButton>
-                            </Center>
+                            <SearchButton type="submit">
+                                Search
+                            </SearchButton>
                         </SearchContainer>
                     </form>
                 </Center>
@@ -175,8 +169,8 @@ const NotLoggedInHeader = () => {
                             textDecoration: "inherit",
                         }}
                     >
-                        <MenuItem>
-                            <LoginWrapper>
+                        <MenuItem >
+                            <LoginWrapper >
                                 <AccountCircleOutlinedIcon />
                                 Login
                             </LoginWrapper>
@@ -191,6 +185,7 @@ const NotLoggedInHeader = () => {
 const LoggedInHeader = (user) => {
     let currentUser = JSON.parse(user);
     const [dropDownStatus, setDropDownStatus] = useState(false);
+    const isAdmin = currentUser.name === "admin" ? true : false;
 
     const openDropDown = () => setDropDownStatus(!dropDownStatus);
 
@@ -198,7 +193,7 @@ const LoggedInHeader = (user) => {
         // Void the session
         sessionStorage.setItem('user', '{}');
         sessionStorage.setItem('token', '');
-    
+
         // Immediately refresh the page
         window.location.reload();
     }
@@ -215,19 +210,15 @@ const LoggedInHeader = (user) => {
                 <Center>
                     <form action="/searchResult/" method="get">
                         <SearchContainer>
-                            <label htmlFor="header-search" />
-                            <input
+                            <Input
                                 type="text"
                                 id="header-search"
                                 placeholder="Search item"
                                 name="item"
-                                style={Input}
                             />
-                            <Center>
-                                <SearchButton type="submit">
-                                    Search
-                                </SearchButton>
-                            </Center>
+                            <SearchButton type="submit">
+                                Search
+                            </SearchButton>
                         </SearchContainer>
                     </form>
                 </Center>
@@ -255,18 +246,22 @@ const LoggedInHeader = (user) => {
                     <MenuItem>
                         <LoginWrapper onClick={() => openDropDown()}>
                             <AccountCircleOutlinedIcon />
-                            Welcome, {currentUser.name}!
+                            Welcome, {currentUser.name.length > 9 ? currentUser.name.slice(0, 9) + "..." : currentUser.name}!
                         </LoginWrapper>
                         {dropDownStatus ? (
                             <DropDownContainer>
-                                <Dropdown>
-                                    View orders
-                                </Dropdown>
+                                <Link
+                                    to="/"
+                                    style={{ "textDecoration": "inherit" }}>
+                                    <Dropdown>
+                                        {isAdmin ? "Manage all orders" : "View your orders"}
+                                    </Dropdown>
+                                </Link>
                                 <Dropdown>
                                     View account
                                 </Dropdown>
                                 <Dropdown
-                                    style={{ "border-bottom": "0px" }}
+                                    style={{ "borderBottom": "0px" }}
                                     onClick={() => handleLogout()}
                                 >
                                     Log out
