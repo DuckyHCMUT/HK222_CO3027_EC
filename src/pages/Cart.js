@@ -115,42 +115,40 @@ const Cart = () => {
             });
     }, [reloadCart]);
 
-    if (!isLoggedIn(sessionStorage['user'])) {
-        window.location = "/login";
-    } else {
-        return (
-            <div>
-                <Header user={sessionStorage['user']} />
-                <TopTexts><Link to="/">Home</Link> {'>'} <Link to="/cart">Cart</Link></TopTexts>
-                <Hr />
-                <Container>
-                    <CartWrapper>
-                        {cartItems ?
-                            cartItems.map((item) => (
-                                <CartItem key={item._id} item={item} reloadCart={() => setReloadCart(!reloadCart)} />
-                            )) : 'Your cart is current empty :)'}
-                    </CartWrapper>
-                    <Summary>
-                        <SummaryTitle>SUMMARY</SummaryTitle>
-                        <SummaryItem>
-                            <SummaryItemText>Items:</SummaryItemText>
-                            <SummaryItemPrice> {totalItemsCount} </SummaryItemPrice>
-                        </SummaryItem>
-                        <SummaryItem type="total">
-                            <SummaryItemText> Total </SummaryItemText>
-                            <SummaryItemPrice> {totalAmount} </SummaryItemPrice>
-                        </SummaryItem>
-                        <Link to="/">
-                            <Button> Checkout </Button>
-                        </Link>
-                        <Link to="/">
-                            <Button> Choose another product</Button>
-                        </Link>
-                    </Summary>
-                </Container>
-            </div>
-        );
-    }
+
+    return (
+        <div>
+            <Header user={sessionStorage['user']} />
+            <TopTexts><Link to="/">Home</Link> {'>'} <Link to="/cart">Cart</Link></TopTexts>
+            <Hr />
+            <Container>
+                <CartWrapper>
+                    {cartItems ?
+                        cartItems.map((item) => (
+                            <CartItem key={item._id} item={item} reloadCart={() => setReloadCart(!reloadCart)} />
+                        )) : 'Your cart is current empty :)'}
+                </CartWrapper>
+                <Summary>
+                    <SummaryTitle>SUMMARY</SummaryTitle>
+                    <SummaryItem>
+                        <SummaryItemText>Items:</SummaryItemText>
+                        <SummaryItemPrice> {totalItemsCount} </SummaryItemPrice>
+                    </SummaryItem>
+                    <SummaryItem type="total">
+                        <SummaryItemText> Total </SummaryItemText>
+                        <SummaryItemPrice> {totalAmount} </SummaryItemPrice>
+                    </SummaryItem>
+                    <Link to="/payment">
+                        <Button> Checkout </Button>
+                    </Link>
+                    <Link to="/">
+                        <Button> Choose another product</Button>
+                    </Link>
+                </Summary>
+            </Container>
+        </div>
+    );
+
 };
 
 export default Cart;
