@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Header from "../components/Header";
 import { apiKey } from "../api/ApiKey";
 import CustomerOrder from "../components/Admin/CustomerOrder";
-import { isAdmin, isLoggedIn } from "../utility/utility";
+import { isLoggedIn } from "../utility/utility";
 
 const Container = styled.div`
     display: flex;
@@ -21,14 +21,15 @@ const HeaderText = styled.h2`
     margin: 30px 200px 20px 200px;
 `;
 
-const ManageOrders = () => {
+const CustomerOrders = () => {
     const [allOrdersData, setAllOrdersData] = useState([]);
-    const [isProcessed, setIsProcessed] = useState(false);
+
+    // User information
+    let currentUser = JSON.parse(sessionStorage['user']);
 
     useEffect(() => {
-        axios.get(apiKey + 'orders')
+        axios.get(apiKey + 'order/' + currentUser.id)
             .then((response) => {
-                console.log(response);
                 if (response.status === 200 && response.data.msg === "Successful") {
                     setAllOrdersData(response.data.data);
                     console.log(response.data.data);
@@ -37,22 +38,22 @@ const ManageOrders = () => {
             .catch((error) => {
                 console.log(error)
             });
-    }, [isProcessed]);
+    }, []);
 
-    if (!isLoggedIn(sessionStorage['user']) || !isAdmin(sessionStorage['user'])) {
+    if (!isLoggedIn(sessionStorage['user'])) {
         window.location = "/login";
     } else {
         return (
             <div>
                 <Header user={sessionStorage['user']} />
-                <HeaderText>View all customers' orders</HeaderText>
+                <HeaderText>My past orders</HeaderText>
                 <Container>
                     {allOrdersData ? allOrdersData.map((order) => (
-                        <CustomerOrder key={order._id} order={order} reloadOrders={() => setIsProcessed(!isProcessed)} />)) : "Loading..."}
+                        <CustomerOrder key={order._id} order={order} />)) : "Loading..."}
                 </Container>
             </div>
         );
     }
 }
 
-export default ManageOrders;
+export default CustomerOrders;

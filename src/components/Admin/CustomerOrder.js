@@ -8,17 +8,60 @@ import PaidIcon from '@mui/icons-material/Paid';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { useState } from "react";
-import { formatPrice } from "../../utility/utility";
+import { forwardRef, useState } from "react";
+import { formatPrice, isAdmin } from "../../utility/utility";
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
+import CheckIcon from '@mui/icons-material/Check';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import axios from 'axios';
+import { apiKey } from '../../api/ApiKey';
+import MuiAlert from '@mui/material/Alert';
+import { Snackbar } from '@mui/material';
 
-const CustomerOrder = ({ order }) => {
+const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const CustomerOrder = ({ order, reloadOrders }) => {
     const [open, setOpen] = useState(true);
+    const [openSnackBar, setOpenSnackBar] = useState(false);
 
     const handleClick = () => {
         setOpen(!open);
     };
+
+    const orderStatus = () => {
+        return order.status;
+    }
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSnackBar(false);
+    };
+
+    const processOrder = () => {
+        // Thing still possibly goes wrong, so need to check again.
+        if (isAdmin(sessionStorage['user'])) {
+            let body = {
+                orderId: order._id
+            };
+
+            axios.put(apiKey + 'acceptOrder', body, {
+                headers: { "Content-Type": "application/json" },
+            })
+                .then((response) => {
+                    console.log(response);
+                    reloadOrders();
+                    setOpenSnackBar(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
 
     return (
         <List
@@ -28,7 +71,18 @@ const CustomerOrder = ({ order }) => {
             subheader={
                 <ListSubheader component="div" id="nested-list-subheader">
                     Order ID: <b>{order._id}</b>
-                    <Button variant="contained" color="success" endIcon={<SendIcon />} sx={{ float: "right", marginTop: "10px" }}>Process</Button>
+                    {
+                        isAdmin(sessionStorage['user']) ? // For admin
+                            (orderStatus() === "open"
+                                ? <Button variant="contained" color="success" endIcon={<SendIcon />} sx={{ float: "right", marginTop: "10px" }} onClick={() => processOrder()}>Process</Button>
+                                : <Button variant="contained" color="info" endIcon={<CheckIcon />} sx={{ float: "right", marginTop: "10px" }}>Finished</Button>
+                            ) : // For normal user
+                            (orderStatus() === "open"
+                                ? <Button variant="contained" color="secondary" endIcon={<ShoppingBagIcon />} sx={{ float: "right", marginTop: "10px" }}>Awaiting</Button>
+                                : <Button variant="contained" color="success" endIcon={<CheckIcon />} sx={{ float: "right", marginTop: "10px" }}>Finished</Button>
+                            )
+                    }
+
                 </ListSubheader>
             }
         >
@@ -60,6 +114,11 @@ const CustomerOrder = ({ order }) => {
                     ))}
                 </List>
             </Collapse>
+            <Snackbar open={openSnackBar} autoHideDuration={3000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Order {order._id} has been processed successfully.
+                </Alert>
+            </Snackbar>
         </List>
     );
 }
