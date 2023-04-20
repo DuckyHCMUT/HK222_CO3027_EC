@@ -10,14 +10,14 @@ const Container = styled.div`
     justify-content: center;
 `;
 
-const SearchedContent = ({ value }) => {
+const CategoryContent = ({ category }) => {
     return (
         <div>
             <Container>
-                <Products value={value} />
+                <Products category={category} />
             </Container>
         </div>
     )
 };
 
-export default SearchedContent;
+export default CategoryContent;

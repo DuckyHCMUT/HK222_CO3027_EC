@@ -24,7 +24,7 @@ const Content = () => {
                 Featured phones
             </CategoryText>
             <Container>
-                <Products query={''} />
+                <Products value={''} category={''} />
             </Container>
         </div>
     )
