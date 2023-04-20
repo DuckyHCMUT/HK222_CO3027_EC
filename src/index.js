@@ -9,14 +9,10 @@ import Cart from './pages/Cart';
 import SearchResult from './pages/SearchResult';
 import ProductDetail from './pages/ProductDetail';
 import Login from './pages/Login';
-
 import Payment from './pages/Payment/Payment';
-
-
 import Register from './pages/Register';
 import ManageOrders from './pages/ManageOrders';
-
-
+import CustomerOrders from './pages/CustomerOrders';
 
 export default function App() {
 	// Initially set the user token
@@ -36,6 +32,7 @@ export default function App() {
 				<Route path="payment" element={<Payment />} />
 				<Route path="register" element={<Register />} />
 				<Route path="manageOrders" element={<ManageOrders />} />
+				<Route path="myOrders" element={<CustomerOrders />} />
 			</Routes>
 		</BrowserRouter>
 	);
