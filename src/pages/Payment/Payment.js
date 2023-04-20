@@ -1,5 +1,10 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import Header from "../../components/Header";
-import '../../../node_modules/font-awesome/css/font-awesome.min.css'; 
+import { apiKey } from '../../api/ApiKey';
+import { formatPrice } from "../../utility/utility";
+import '../../../node_modules/font-awesome/css/font-awesome.min.css';
 import './payment_style.css';
 import { apiKey } from '../../api/ApiKey';
 import axios from 'axios';
@@ -237,25 +242,25 @@ const Payment = () => {
               <i className="fa fa-institution icon"></i>
             </div>
           </div> */}
-          {/* <!--Account Information End--> */}
+                    {/* <!--Account Information End--> */}
 
-          {/* <!--DOB & Gender Start--> */}
-          <div className="input_group">
-            <div className="input_box">
-              <h4>Date Of Birth</h4>
-              <input type="text" placeholder="DD" required className="dob" />
-              <input type="text" placeholder="MM" required className="dob" />
-              <input type="text" placeholder="YYYY" required className="dob" />
-            </div>
-            <div className="input_box">
-              <h4>Gender</h4>
-              <input type="radio" name="gender" className="radio" id="b1" checked/>
-              <label  className="gen"for="b1">Male</label>
-              <input type="radio" name="gender" className="radio" id="b2" />
-              <label  className="gen"for="b2">Female</label>
-            </div>
-          </div>
-          {/* <!--DOB & Gender End--> */}
+                    {/* <!--DOB & Gender Start--> */}
+                    {/* <div className="input_group">
+                        <div className="input_box">
+                            <h4>Date Of Birth</h4>
+                            <input type="text" placeholder="DD" required className="dob" />
+                            <input type="text" placeholder="MM" required className="dob" />
+                            <input type="text" placeholder="YYYY" required className="dob" />
+                        </div>
+                        <div className="input_box">
+                            <h4>Gender</h4>
+                            <input type="radio" name="gender" className="radio" id="b1" checked />
+                            <label className="gen" htmlFor="b1">Male</label>
+                            <input type="radio" name="gender" className="radio" id="b2" />
+                            <label className="gen" htmlFor="b2">Female</label>
+                        </div>
+                    </div> */}
+                    {/* <!--DOB & Gender End--> */}
 
           {/* <!--Payment Details Start--> */}
           <div className="input_group">
