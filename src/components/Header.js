@@ -203,7 +203,7 @@ const LoggedInHeader = (user) => {
                 <Left>
                     <Link style={{ textDecoration: 'none' }}
                         to="/">
-                        <Logo>Store</Logo>
+                        <Logo>Xoppie</Logo>
                     </Link>
                 </Left>
                 <Center>
