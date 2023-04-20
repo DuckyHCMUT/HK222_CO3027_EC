@@ -1,12 +1,17 @@
 import Header from "../../components/Header";
 import '../../../node_modules/font-awesome/css/font-awesome.min.css'; 
 import './payment_style.css';
-import { apiKey } from '../../api/ApiKey';
+// import { apiKey } from '../../api/ApiKey';
 import axios from 'axios';
+
+
+
+import Swal from 'sweetalert2';
+
 import { useState, useEffect } from 'react';
-const paymentSucceded = () => {
-  alert("I am an alert box!");
-}
+
+const apiKey = "http://localhost:9000/"
+
 
 const Payment = () => {
   const handleClick = () => {
@@ -14,10 +19,137 @@ const Payment = () => {
     window.location.href = "/";
   };
 
+  let user = JSON.parse(sessionStorage['user']);
+
   const [cart, setCart] = useState({});
+
+  const [shippingInfo, setShippingInfo] = useState({});
+
+  const [paymentOption, setPaymentOption] = useState('cod');
+
   let currentUser = JSON.parse(sessionStorage['user']);
 
+  const handleCreateOrder = async () => { 
+    if(paymentOption === 'cod'){
+      //Create the order here 
+      const userId = currentUser.id;
+      var items = cart.items.map(item => {
+        return {
+          quantity : item.quantity,
+          image : item.image,
+          productId : item.productId, 
+          name : item.name, 
+          colorOption : item.colorOption,
+          storageOption : item.storageOption,
+          price : item.price
+        }
+      });
 
+      var body = {
+        userId : userId,
+        items : items,
+        shippingInfo : shippingInfo,
+        bill : cart.bill,
+        status : "open"
+      }
+
+      // alert(JSON.stringify(body));
+
+
+      await axios.post(apiKey + 'order', body)
+			.then((res) => {
+				// Fire a success notification and save token, user info on success
+				if (res.status === 200 && res.data.msg === 'Successful') {
+					// Order created successfully
+					Swal.fire({
+						title: 'Order created successfully',
+						html: 'Yor order has been placed !',
+						timer: 3000,
+						icon: 'success',
+						confirmButtonColor: '#3085d6',
+						confirmButtonText: 'Redirect'
+					}).then(() => {
+						window.location = "/";
+					});
+				}
+        else{
+					Swal.fire({
+						title: 'Failed',
+						html: 'Something went wrong',
+						timer: 3000,
+						icon: 'error',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Let me try again'
+					}).then(() => {
+						window.location = "/";
+					}); 
+        }
+			}).catch((error) => {
+				Swal.fire({
+					title: 'Order',
+					text: error.response.data.msg,
+					icon: 'error',
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: 'Let me try again'
+				});
+			});
+
+    }else{
+      // alert("Momo đang làm")
+
+
+      var body ={
+        orderInfo : "Thanh toán hóa đơn của " + user.name,
+        amount : cart.bill.toString(), 
+
+      }
+
+
+      await axios.post(apiKey + 'momoCheckout', body)
+			.then((res) => {
+				if (res.status === 200 && res.data.localMessage === "Thành công") {
+					// Order created successfully
+					Swal.fire({
+						title: 'Đang chuyển sang cổng thanh toán momo',
+						html: res.data.payUrl,
+						timer: 3000,
+						icon: 'success',
+						// confirmButtonColor: '#3085d6',
+						// confirmButtonText: 'Redirect'
+					}).then(()=>{
+            // window.location.href = res.data.payUrl;
+            if(res.data.payUrl){
+              window.open(res.data.payUrl);
+            }
+          })
+
+          
+          
+				}
+        else{
+					Swal.fire({
+						title: 'Failed',
+						html: 'Something went wrong',
+						timer: 3000,
+						icon: 'error',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Let me try again'
+					})
+        }
+			}).catch((error) => {
+				Swal.fire({
+					title: 'Order',
+					text: error.response.data.msg,
+					icon: 'error',
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: 'Let me try again'
+				});
+			});
+
+
+
+    }
+  }
 
   useEffect(()=> {
     // Call API to get the cart information
@@ -55,6 +187,12 @@ const Payment = () => {
                 placeholder="Full Name"
                 required
                 className="name"
+                onChange={(e) => {
+                  setShippingInfo({
+                    ...shippingInfo,
+                    name : e.target.value
+                  })
+                }}
               />
               <i className="fa fa-user icon"></i>
             </div>
@@ -62,10 +200,16 @@ const Payment = () => {
           <div className="input_group">
             <div className="input_box">
               <input
-                type="email"
-                placeholder="Email Address"
+                type="text"
+                placeholder="Phone number"
                 required
                 className="name"
+                onChange={(e) => {
+                  setShippingInfo({
+                    ...shippingInfo,
+                    contact : e.target.value
+                  })
+                }}
               />
               <i className="fa fa-envelope icon"></i>
             </div>
@@ -77,6 +221,12 @@ const Payment = () => {
                 placeholder="Address"
                 required
                 className="name"
+                onChange={(e) => {
+                  setShippingInfo({
+                    ...shippingInfo,
+                    address : e.target.value
+                  })
+                }}
               />
               <i className="fa fa-map-marker icon" aria-hidden="true"></i>
             </div>
@@ -111,21 +261,23 @@ const Payment = () => {
           <div className="input_group">
             <div className="input_box">
               <h4>Payment Details</h4>
-              <input type="radio" name="pay"  className="radio" id="bc1" checked />
+              <input type="radio" name="pay"  className="radio" id="bc1" checked = {paymentOption === 'cod'}  onChange={()=>{setPaymentOption('cod')}}/>
               <label for="bc1">
                 <span>
-                  <i className="fa fa-cc-visa"></i>Credit Card
+                  COD
                 </span>
               </label>
-              <input type="radio" name="pay" className="radio" id="bc2" />
+              <input type="radio" name="pay" className="radio" id="bc2" checked = {paymentOption === 'momo'} onChange={()=>{setPaymentOption('momo')}} />
               <label for="bc2">
                 <span>
-                  <i className="fa fa-cc-paypal"></i>Paypal
+                  MOMO
                 </span>
               </label>
+
+              
             </div>
           </div>
-          <div className="input_group">
+          {/* <div className="input_group">
             <div className="input_box">
               <input
                 type="tel"
@@ -136,8 +288,8 @@ const Payment = () => {
               />
               <i className="fa fa-credit-card icon"></i>
             </div>
-          </div>
-          <div className="input_group">
+          </div> */}
+          {/* <div className="input_group">
             <div className="input_box">
               <input
                 type="tel"
@@ -148,8 +300,8 @@ const Payment = () => {
               />
               <i className="fa fa-user icon"></i>
             </div>
-          </div>
-          <div className="input_group">
+          </div> */}
+          {/* <div className="input_group">
             <div className="input_box">
               <div className="input_box">
                 <input
@@ -170,7 +322,7 @@ const Payment = () => {
               />
               <i className="fa fa-calendar-o icon" aria-hidden="true"></i>
             </div>
-          </div>
+          </div> */}
           <div className="input_box">
             <input
               name="amount"
@@ -187,7 +339,7 @@ const Payment = () => {
 
           <div className="input_group">
             <div className="input_box">
-            <button type="button" onClick={handleClick}>
+            <button type="button" onClick={handleCreateOrder}>
                 Pay Now
               </button>
             </div>
