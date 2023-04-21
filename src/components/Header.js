@@ -123,7 +123,7 @@ const NotLoggedInHeader = () => {
                 <Left>
                     <Link style={{ textDecoration: 'none' }}
                         to="/">
-                        <Logo>Store</Logo>
+                        <Logo>Xoppie</Logo>
                     </Link>
                 </Left>
                 <Center>
@@ -245,7 +245,7 @@ const LoggedInHeader = (user) => {
                     <MenuItem>
                         <LoginWrapper onClick={() => openDropDown()}>
                             <AccountCircleOutlinedIcon />
-                            Welcome, {currentUser.name.length > 9 ? currentUser.name.slice(0, 9) + "..." : currentUser.name}!
+                            Welcome, {currentUser.name.length > 7 ? currentUser.name.slice(0, 7) + "..." : currentUser.name}!
                         </LoginWrapper>
                         {dropDownStatus ? (
                             <DropDownContainer>
