@@ -63,6 +63,18 @@ const CustomerOrder = ({ order, reloadOrders }) => {
         }
     }
 
+    const displayUnitInfo = (name, storage = '', color = '') => {
+        if (storage === '' && color === '') {
+            return ` ${name}` ;
+        } else if (storage === '' && color !== '') {
+            return ` ${name} (${color})` ;
+        } else if (storage !== '' && color === '') {
+            return ` ${name} (${storage})` ;
+        } else {
+            return ` ${name} (${storage}, ${color}) `;
+        }
+    }
+
     return (
         <List
             sx={{ width: '100%', maxWidth: 6000, bgcolor: 'background.paper', margin: "10px 0px 10px 0px", border: "1px solid black", borderRadius: "10px", overflow: "hidden" }}
@@ -107,9 +119,9 @@ const CustomerOrder = ({ order, reloadOrders }) => {
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    {order.items.map((item) => (
+                    {order.items.map((item, index) => (
                         <ListItemButton key={item._id} sx={{ pl: 4 }}>
-                            {item.name} ({item.storageOption}, {item.colorOption}) <b>x{item.quantity}</b>
+                            <b>{index + 1}.</b>{displayUnitInfo(item.name, item.storageOption, item.colorOption)} <b>x{item.quantity}</b>
                         </ListItemButton>
                     ))}
                 </List>
