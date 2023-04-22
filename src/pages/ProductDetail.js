@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import { List } from "@mui/material";
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const style = {
     minWidth: '10rem',
@@ -120,12 +121,10 @@ const StorageOption = styled.div`
     padding: 1em;
     font-weight: bold;
     display: flex;
-    height: 1.5rem;
     min-height: 1rem;
     max-height: 2rem;
-    width: 5rem;
-    min-width: 4rem;
-    max-width: 6rem;
+    min-width: 6.5rem;
+    max-width: 7rem;
     transition: ease-out 0.3s;
     overflow: hidden;
     &:hover{
@@ -189,6 +188,8 @@ const ProductDetail = () => {
     const [productInfo, setProductInfo] = useState({});
     const [selectedStorage, setSelectedStorage] = useState({});
     const [selectedColor, setSelectedColor] = useState({});
+    const [storageOptions, setStorageOptions] = useState();
+    const [colorOptions, setColorOptions] = useState();
 
     const handleStorageChange = (option) => {
         setSelectedStorage(option);
@@ -215,8 +216,18 @@ const ProductDetail = () => {
         });
     }
 
-    const alertOnAddSuccess = (name, storage, color) => {
-        let message = `<b>${name} (${storage}, ${color})</b> has been added to your cart.`;
+    const alertOnAddSuccess = (name, storage = '', color = '') => {
+        let message;
+
+        if (storage === '' && color === '') {
+            message = `<b>${name}</b> has been added to your cart.`;
+        } else if (storage === '' && color !== '') {
+            message = `<b>${name} (${color})</b> has been added to your cart.`;
+        } else if (storage !== '' && color === '') {
+            message = `<b>${name} (${storage})</b> has been added to your cart.`;
+        } else {
+            message = `<b>${name} (${storage}, ${color})</b> has been added to your cart.`;
+        }
 
         Swal.fire({
             title: 'Success!',
@@ -252,15 +263,28 @@ const ProductDetail = () => {
             alertOnNotLoggedIn();
         } else {
             let user = JSON.parse(sessionStorage['user']);
-            axios.post(apiKey + 'cart/' + user.id, {
+
+            let body = {
                 "productId": productId,
-                "storageOption": selectedStorage.name,
-                "colorOption": selectedColor.name,
                 "quantity": 1
-            }).then((response) => {
+            }
+
+            if (storageOptions.length) {
+                body["storageOption"] = selectedStorage.name
+            }
+            if (colorOptions.length) {
+                body["colorOption"] = selectedColor.name
+            }
+
+            axios.post(apiKey + 'cart/' + user.id, body).then((response) => {
                 console.log(response);
                 if (response.status === 200 && response.data.msg === "Successful") {
-                    alertOnAddSuccess(productInfo.name, selectedStorage.name, selectedColor.name);
+                    alertOnAddSuccess(
+                        productInfo.name,
+                        storageOptions.length ? selectedStorage.name : '',
+                        colorOptions.length ? selectedColor.name : ''
+                    );
+
                 } else {
                     alertOnAddFailed(response);
                 }
@@ -275,18 +299,25 @@ const ProductDetail = () => {
             .then((response) => {
                 if (response.status === 200 && response.data.msg === "Successful") {
                     console.log(response.data.data);
-                    setProductInfo(response.data.data);
-                    setSelectedStorage(response.data.data.storage_options[0]);
-                    setSelectedColor(response.data.data.color_options[0]);
-                    setCurrentPrice(response.data.data.storage_options[0].price);
-                } else {
 
+                    // Set common information
+                    setProductInfo(response.data.data);
+                    setStorageOptions(response.data.data.storage_options);
+                    setColorOptions(response.data.data.color_options);
+
+                    if (response.data.data.storage_options.length === 0) {
+                        setCurrentPrice(response.data.data.price);
+                        setSelectedColor(response.data.data.color_options[0]);
+                    } else {
+                        setCurrentPrice(response.data.data.storage_options[0].price);
+                        setSelectedStorage(response.data.data.storage_options[0]);
+                        setSelectedColor(response.data.data.color_options[0]);
+                    }
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
-
     }, []);
 
     return (
@@ -308,41 +339,57 @@ const ProductDetail = () => {
                         {currentPrice ? formatPrice(currentPrice) : formatPrice(99999999)}
                     </ProductPrice>
                     <br />
-                    Choose product storage capacity
-                    <ProductOptionWrapper>
-                        {productInfo.storage_options ? productInfo.storage_options.map((option) => (
+                    {!storageOptions ?
+                        (<center>
+                            <CircularProgress color="secondary" />
+                        </center>) : storageOptions.length === 0 ? null : (
                             <div>
-                                <StorageOption
-                                    key={option.name}
-                                    value={option.name}
-                                    onClick={() => handleStorageChange(option)}
-                                    style={selectedStorage === option ? { "border": "1px solid red" } : null}
-                                >
-                                    {option.name}
-                                    <br />
-                                    {formatPrice(option.price)}
-                                </StorageOption>
+                                <ProductOptionWrapper>
+                                    Choose product storage capacity
+                                    {productInfo.storage_options.map((option) => (
+                                        <div>
+                                            <StorageOption
+                                                key={option.name}
+                                                value={option.name}
+                                                onClick={() => handleStorageChange(option)}
+                                                style={selectedStorage === option ? { "border": "1px solid red" } : null}
+                                            >
+                                                {option.name}
+                                                <br />
+                                                {formatPrice(option.price)}
+                                            </StorageOption>
+                                        </div>
+                                    ))}
+                                </ProductOptionWrapper>
+                                <hr />
                             </div>
-                        )) : ""}
-                    </ProductOptionWrapper>
-                    <hr />
-                    Choose product color
-                    <ProductOptionWrapper>
-                        {productInfo.color_options ? productInfo.color_options.map((option) => (
-                            <div>
-                                <ColorOption
-                                    key={option.name}
-                                    value={option.name}
-                                    onClick={() => handleColorChange(option)}
-                                    style={selectedColor === option ? { "border": "1px solid red" } : null}>
-                                    <ProductOptionImage src={option.variantImg} />
-                                    {option.name} <br />
-                                    {formatPrice(selectedStorage.price)}
-                                </ColorOption>
-                            </div>
-                        )) : ""}
-                    </ProductOptionWrapper>
-                    <hr />
+                        )
+                    }
+                    {!colorOptions ? (
+                        <center>
+                            <CircularProgress color="secondary" />
+                        </center>
+                    ) : colorOptions.length === 0 ? null : (
+                        <div>
+                            Choose product color
+                            <ProductOptionWrapper>
+                                {productInfo.color_options.length > 0 ? productInfo.color_options.map((option) => (
+                                    <div>
+                                        <ColorOption
+                                            key={option.name}
+                                            value={option.name}
+                                            onClick={() => handleColorChange(option)}
+                                            style={selectedColor === option ? { "border": "1px solid red" } : null}>
+                                            <ProductOptionImage src={option.variantImg} />
+                                            {option.name} <br />
+                                            {formatPrice(currentPrice)}
+                                        </ColorOption>
+                                    </div>
+                                )) : null}
+                            </ProductOptionWrapper>
+                            <hr />
+                        </div>
+                    )}
                     <Button onClick={() => handleAddToCart()}>Add to cart</Button>
                 </ProductOptionContainer>
                 <List sx={style} component="nav" aria-label="status_options">
@@ -353,7 +400,7 @@ const ProductDetail = () => {
                     {productInfo.status_options ? productInfo.status_options.map((option) => {
                         return (
                             <div>
-                                <ListItem sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                                <ListItem key={option} sx={{ paddingTop: 0, paddingBottom: 0 }}>
                                     <Typography variant="body2" gutterBottom>
                                         • {option}
                                     </Typography>
