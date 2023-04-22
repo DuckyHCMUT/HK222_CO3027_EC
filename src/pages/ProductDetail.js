@@ -8,6 +8,25 @@ import { apiKey } from "../api/ApiKey";
 import { formatPrice, isLoggedIn } from "../utility/utility";
 import Swal from "sweetalert2";
 
+import { List } from "@mui/material";
+import ListItem from '@mui/material/ListItem';
+import Typography from '@mui/material/Typography';
+
+const style = {
+    minWidth: '10rem',
+    maxWidth: '40rem',
+    width: '40rem',
+    minHeight: '10rem',
+    maxHeight: '40rem',
+    height: '25rem',
+    bgcolor: 'background.paper',
+    borderRadius: 5,
+    boxShadow: 1,
+    marginLeft: '1vw',
+    fontSize: '1rem',
+    display: 'inline-block'
+};
+
 const Container = styled.div`
     display: flex;
     flex-direction: row;
@@ -38,8 +57,14 @@ const ProductImageContainer = styled.div`
     border-radius: 10px;
     margin-top: 5px;
     margin-right: 20px;
-    background: linear-gradient(90deg,#218adf,#f7cc97);
-    width: 30em;
+    background: linear-gradient(90deg, rgb(33, 138, 223), rgb(33 70 70));
+    min-width: 10rem;
+    max-width: 40rem;
+    width: 40rem;
+    min-height: 10rem;
+    max-height: 40rem;
+    height: 25rem;
+    overflow: hidden;
 `;
 
 const ProductImage = styled.img`
@@ -48,6 +73,7 @@ const ProductImage = styled.img`
     margin-left: auto;
     margin-right: auto;
     width: 40%;
+    overflow: hidden;
 `;
 
 const ProductDescriptionWrapper = styled.div`
@@ -58,10 +84,17 @@ const ProductDescription = styled.span`
     display: flex;
     flex-direction: column;
     color: white;
+    line-height: 1.4;
+    font-size: 0.8rem;
 `;
 
 const ProductOptionContainer = styled.div`
-
+    min-width: 10rem;
+    max-width: 40rem;
+    width: 40rem;
+    min-height: 10rem;
+    max-height: 40rem;
+    height: 25rem;
 `;
 
 const ProductPrice = styled.div`
@@ -73,31 +106,63 @@ const ProductPrice = styled.div`
 
 const ProductOptionWrapper = styled.div`
     display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 0.5em;
+    margin-top: 0.5rem;
 `;
 
-const ProductOption = styled.a`
-    border: 0;
-    text-decoration: none;
+const StorageOption = styled.div`
     border-radius: 10px;
-    border: 1px solid;
+    border: 1px solid #bfbbbb;
     font-size: 12px;
     cursor: pointer;
-    padding: 10px;
+    padding: 1em;
     font-weight: bold;
-    display: inline-block;
-    margin: 5px;
+    display: flex;
+    height: 1.5rem;
+    min-height: 1rem;
+    max-height: 2rem;
+    width: 5rem;
+    min-width: 4rem;
+    max-width: 6rem;
+    transition: ease-out 0.3s;
+    overflow: hidden;
     &:hover{
-        background-color: #f8f4f4;
+        background-color: #97ebf0;
+        transition: ease-out 0.3s;
+    }
+`;
+
+const ColorOption = styled.div`
+    border-radius: 10px;
+    border: 1px solid #bfbbbb;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 1em;
+    font-weight: bold;
+    display: flex;
+    height: 1.5rem;
+    min-height: 1rem;
+    max-height: 2rem;
+    width: 6.7rem;
+    min-width: 6.5rem;
+    max-width: 7rem;
+    transition: ease-out 0.3s;
+    overflow: hidden;
+    &:hover{
+        background-color: #97ebf0;
+        transition: ease-out 0.3s;
     }
 `;
 
 const ProductOptionImage = styled.img`
     max-height: 3em;
+    margin-right: 0.2vw;
 `;
 
 const Button = styled.button`
-    background-image: linear-gradient(to right, #314755 0%, #26a0da  51%, #314755  100%);
-    margin: 10px 0px 0px 0px;
+    background-image: linear-gradient(to right, #314755 0%, #26a0da 51%, #314755 100%);
     width: 100%;
     padding: 15px 45px;
     text-align: center;
@@ -247,38 +312,56 @@ const ProductDetail = () => {
                     <ProductOptionWrapper>
                         {productInfo.storage_options ? productInfo.storage_options.map((option) => (
                             <div>
-                                <ProductOption
+                                <StorageOption
                                     key={option.name}
                                     value={option.name}
                                     onClick={() => handleStorageChange(option)}
-                                    style={selectedStorage === option ? { "border": "2px solid red" } : null}
+                                    style={selectedStorage === option ? { "border": "1px solid red" } : null}
                                 >
                                     {option.name}
-                                    <hr />
+                                    <br />
                                     {formatPrice(option.price)}
-                                </ProductOption>
+                                </StorageOption>
                             </div>
                         )) : ""}
                     </ProductOptionWrapper>
+                    <hr />
                     Choose product color
                     <ProductOptionWrapper>
                         {productInfo.color_options ? productInfo.color_options.map((option) => (
                             <div>
-                                <ProductOption
+                                <ColorOption
                                     key={option.name}
                                     value={option.name}
                                     onClick={() => handleColorChange(option)}
-                                    style={selectedColor === option ? { "border": "2px solid red" } : null}>
+                                    style={selectedColor === option ? { "border": "1px solid red" } : null}>
                                     <ProductOptionImage src={option.variantImg} />
-                                    {option.name}
-                                    <hr />
+                                    {option.name} <br />
                                     {formatPrice(selectedStorage.price)}
-                                </ProductOption>
+                                </ColorOption>
                             </div>
                         )) : ""}
                     </ProductOptionWrapper>
+                    <hr />
                     <Button onClick={() => handleAddToCart()}>Add to cart</Button>
                 </ProductOptionContainer>
+                <List sx={style} component="nav" aria-label="status_options">
+                    <ListItem sx={{}} divider>
+                        Product status
+                    </ListItem>
+                    <br />
+                    {productInfo.status_options ? productInfo.status_options.map((option) => {
+                        return (
+                            <div>
+                                <ListItem sx={{ paddingTop: 0, paddingBottom: 0 }}>
+                                    <Typography variant="body2" gutterBottom>
+                                        • {option}
+                                    </Typography>
+                                </ListItem>
+                            </div>
+                        )
+                    }) : ""}
+                </List>
             </Container>
         </div>
     );
