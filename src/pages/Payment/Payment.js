@@ -91,7 +91,30 @@ const Payment = () => {
 					});
 				});
 		} else {
+			const userId = currentUser.id;
+			var items = cart.items.map(item => {
+				return {
+					quantity: item.quantity,
+					image: item.image,
+					productId: item.productId,
+					name: item.name,
+					colorOption: item.colorOption,
+					storageOption: item.storageOption,
+					price: item.price
+				}
+			});
+
 			var body = {
+				userId: userId,
+				items: items,
+				shippingInfo: shippingInfo,
+				bill: cart.bill,
+				status: "open"
+			}
+
+			await axios.post(apiKey + 'order', body).then().catch();
+
+			body = {
 				orderInfo: "Thanh toán hóa đơn của " + currentUser.name,
 				amount: cart.bill.toString(),
 			}
@@ -101,7 +124,7 @@ const Payment = () => {
 					if (res.status === 200 && res.data.localMessage === "Thành công") {
 						// Order created successfully
 						Swal.fire({
-							title: 'Đang chuyển sang cổng thanh toán momo',
+							title: 'Redirecting to MoMo payment gateway...',
 							html: res.data.payUrl,
 							timer: 3000,
 							icon: 'success',
@@ -137,7 +160,7 @@ const Payment = () => {
 		// Load payment info by default
 		setShippingInfo({
 			name: currentUser.name,
-			contact : currentUser.email
+			contact: currentUser.email
 		});
 
 		// Call API to get the cart information
